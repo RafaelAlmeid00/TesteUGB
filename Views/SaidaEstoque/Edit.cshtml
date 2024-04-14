@@ -1,0 +1,41 @@
+@model UGB.Data.SaidaEstoque
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>SaidaEstoque</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="SaidaId" />
+            <div class="form-group">
+                <label asp-for="SaidaQuantidade" class="control-label"></label>
+                <input asp-for="SaidaQuantidade" class="form-control" />
+                <span asp-validation-for="SaidaQuantidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntradaData" class="control-label"></label>
+                <input asp-for="EntradaData" class="form-control" />
+                <span asp-validation-for="EntradaData" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="UsuarioUserMat" />
+            <input type="hidden" asp-for="ProdutoProdEan" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

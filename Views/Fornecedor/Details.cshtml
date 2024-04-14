@@ -1,0 +1,78 @@
+@model UGB.Data.Fornecedor
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Fornecedor</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorEmail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorEmail)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorInsestadual)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorInsestadual)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorInsmunicipal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorInsmunicipal)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorCep)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorCep)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorBairro)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorBairro)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorCidade)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorCidade)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorUf)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorUf)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorRua)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorRua)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FornecedorNumero)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FornecedorNumero)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.UsuarioUserMatNavigation.UserMat)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.FornecedorCnpj">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

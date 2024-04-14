@@ -1,0 +1,89 @@
+@model IEnumerable<UGB.Data.Fornecedor>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorInsestadual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorInsmunicipal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorCep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorBairro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorCidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorUf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorRua)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FornecedorNumero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorInsestadual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorInsmunicipal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorCep)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorBairro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorCidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorUf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorRua)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FornecedorNumero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioUserMatNavigation.UserMat)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FornecedorCnpj">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FornecedorCnpj">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FornecedorCnpj">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

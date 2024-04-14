@@ -1,0 +1,51 @@
+@model UGB.Data.OrdemCompra
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>OrdemCompra</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="OrdemId" class="control-label"></label>
+                <input asp-for="OrdemId" class="form-control" />
+                <span asp-validation-for="OrdemId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrdemQuantidade" class="control-label"></label>
+                <input asp-for="OrdemQuantidade" class="form-control" />
+                <span asp-validation-for="OrdemQuantidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrdemPrecototal" class="control-label"></label>
+                <input asp-for="OrdemPrecototal" class="form-control" />
+                <span asp-validation-for="OrdemPrecototal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PedidoInternoPedidoId" class="control-label"></label>
+                <select asp-for="PedidoInternoPedidoId" class ="form-control" asp-items="ViewBag.PedidoInternoPedidoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PedidoInternoUsuarioUserMat" class="control-label"></label>
+                <select asp-for="PedidoInternoUsuarioUserMat" class ="form-control" asp-items="ViewBag.PedidoInternoUsuarioUserMat"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

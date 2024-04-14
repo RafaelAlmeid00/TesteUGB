@@ -1,0 +1,51 @@
+@model UGB.Data.EntradaEstoque
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>EntradaEstoque</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="EntradaId" />
+            <div class="form-group">
+                <label asp-for="EntradaNf" class="control-label"></label>
+                <input asp-for="EntradaNf" class="form-control" />
+                <span asp-validation-for="EntradaNf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntradaDeposito" class="control-label"></label>
+                <input asp-for="EntradaDeposito" class="form-control" />
+                <span asp-validation-for="EntradaDeposito" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntradaQuantidade" class="control-label"></label>
+                <input asp-for="EntradaQuantidade" class="form-control" />
+                <span asp-validation-for="EntradaQuantidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EntradaData" class="control-label"></label>
+                <input asp-for="EntradaData" class="form-control" />
+                <span asp-validation-for="EntradaData" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="UsuarioUserMat" />
+            <input type="hidden" asp-for="ProdutoProdEan" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

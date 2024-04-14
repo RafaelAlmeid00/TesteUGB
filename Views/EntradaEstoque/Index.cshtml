@@ -1,0 +1,65 @@
+@model IEnumerable<UGB.Data.EntradaEstoque>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EntradaNf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EntradaDeposito)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EntradaQuantidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EntradaData)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdutoProdEanNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EntradaNf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EntradaDeposito)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EntradaQuantidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EntradaData)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProdutoProdEanNavigation.ProdEan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioUserMatNavigation.UserMat)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,64 @@
+@using Newtonsoft.Json
+@model IEnumerable<UGB.Data.Usuario>
+
+@{
+    ViewData["Title"] = "Index";
+    var usuario = new Usuario();
+    @if (usuario != null && usuario.UserMat != 0)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+
+    <h1 class="title">Usuários</h1>
+
+    <button class="button button-create">
+        <a asp-action="Create" class="text">Criar Usuário</a>
+    </button>
+    @if (usuario != null && usuario.UserMat != 0)
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Nome
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Departamento
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserNome)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserEmail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserDepartamento)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.UserMat">Editar</a> |
+                            <a asp-action="Details" asp-route-id="@item.UserMat">Detalhes</a> |
+                            <a asp-action="Delete" asp-route-id="@item.UserMat">Deletar</a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>Crie um usuário e faça login para acesso!</p>
+    }
+}

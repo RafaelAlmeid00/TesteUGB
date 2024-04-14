@@ -1,0 +1,77 @@
+@model UGB.Data.Fornecedor
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Fornecedor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FornecedorCnpj" class="control-label"></label>
+                <input asp-for="FornecedorCnpj" class="form-control" />
+                <span asp-validation-for="FornecedorCnpj" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorEmail" class="control-label"></label>
+                <input asp-for="FornecedorEmail" class="form-control" />
+                <span asp-validation-for="FornecedorEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorInsestadual" class="control-label"></label>
+                <input asp-for="FornecedorInsestadual" class="form-control" />
+                <span asp-validation-for="FornecedorInsestadual" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorInsmunicipal" class="control-label"></label>
+                <input asp-for="FornecedorInsmunicipal" class="form-control" />
+                <span asp-validation-for="FornecedorInsmunicipal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorCep" class="control-label"></label>
+                <input asp-for="FornecedorCep" class="form-control" />
+                <span asp-validation-for="FornecedorCep" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorCidade" class="control-label"></label>
+                <input asp-for="FornecedorCidade" class="form-control" />
+                <span asp-validation-for="FornecedorCidade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorUf" class="control-label"></label>
+                <input asp-for="FornecedorUf" class="form-control" />
+                <span asp-validation-for="FornecedorUf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorRua" class="control-label"></label>
+                <input asp-for="FornecedorRua" class="form-control" />
+                <span asp-validation-for="FornecedorRua" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FornecedorNumero" class="control-label"></label>
+                <input asp-for="FornecedorNumero" class="form-control" />
+                <span asp-validation-for="FornecedorNumero" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsuarioUserMat" class="control-label"></label>
+                <select asp-for="UsuarioUserMat" class ="form-control" asp-items="ViewBag.UsuarioUserMat"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
