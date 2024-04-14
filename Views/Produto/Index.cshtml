@@ -1,59 +1,64 @@
 @model IEnumerable<UGB.Data.Produto>
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Index";
-}
 
-<h1 class="title">Produtos</h1>
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<button class="button button-create">
-    <a asp-action="Create" class="text">Criar Produto</a>
-</button>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdNome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdPreco)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdFabricante)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdEstoqueminimo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdNome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdPreco)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdFabricante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdEstoqueminimo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioUserMatNavigation.UserMat)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProdEan">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProdEan">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProdEan">Delete</a>
-            </td>
-        </tr>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+    <h1 class="title">Produtos</h1>
+
+    <button class="button button-create">
+        <a asp-action="Create" class="text">Criar Produto</a>
+    </button>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Nome
+                </th>
+                <th>
+                    Preço
+                </th>
+                <th>
+                    Fabricante
+                </th>
+                <th>
+                    Estoque Minimo
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdNome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdPreco)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdFabricante)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdEstoqueminimo)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ProdEan">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.ProdEan">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ProdEan">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

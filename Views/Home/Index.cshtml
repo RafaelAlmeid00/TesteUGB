@@ -1,18 +1,41 @@
 ﻿@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @model UGB.Data.Usuario
 
 @{
     ViewData["Title"] = "Home";
-    var usuario = new Usuario();
+    var errorViewFactory = new ErrorViewFactory();
+    var errorView = errorViewFactory.Create() as IErrorView;
+    @if (TempData["ErrorView"] != null)
+    {
+        var errorViewJson = TempData["ErrorView"] as string;
+        errorView = JsonConvert.DeserializeObject<ErrorView>(errorViewJson);
+    }
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+    List<PedidoInterno> pedidos = null;
+    @if (TempData["PedidoInterno"] != null)
+    {
+        pedidos = JsonConvert.DeserializeObject<List<PedidoInterno>>(TempData["PedidoInterno"].ToString());
+    }
     @if (TempData["Usuario"] != null)
     {
         usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
     }
 
+
+    @if (errorView.Message != null)
+    {
+        <div class="alert alert-danger">
+            @errorView.Message
+        </div>
+    }
+
     <div class="text-center">
-        @if (usuario != null && usuario.UserMat != 0)
+        @if (usuario != null && usuario.UserMat != null)
         {
-            <h1 class="display-4">Bem-vindo, @usuario.UserNome.Split(' ')[0]!</h1>
+            <h1 class="title">Bem-vindo, @usuario.UserNome.Split(' ')[0]!</h1>
         }
         else
         {
@@ -21,18 +44,13 @@
         }
     </div>
 
-    <div class="text-center" style="
-                margin-top: 60px; 
-                using UGB.Interface;
-                display: flex;
-                align-items: center;
-                justify-content: center;">
-        @if (usuario != null && usuario.UserMat != 0)
-        {
-            <p>oi</p>
-        }
-        else
-        {
+    @if (usuario != null && usuario.UserMat != null)
+    {
+        <partial name="~/Views/PedidoInterno/Index.cshtml" model="@pedidos" />
+    }
+    else
+    {
+        <div class="text-center" style="margin-top: 60px; display: flex; align-items: center; justify-content: center;">
             <div class="col-md-4">
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -51,6 +69,6 @@
                     </div>
                 </form>
             </div>
-        }
-    </div>
+        </div>
+    }
 }

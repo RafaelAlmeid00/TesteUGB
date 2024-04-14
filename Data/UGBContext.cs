@@ -30,6 +30,7 @@ public partial class UGBContext : DbContext
     public virtual DbSet<Serviço> Serviços { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
+    public virtual DbSet<Estoque> Estoques { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     => optionsBuilder.UseSqlServer("Server=localhost;Database=UGB;Trusted_Connection=True;TrustServerCertificate=true;");
@@ -129,7 +130,9 @@ public partial class UGBContext : DbContext
             entity.Property(e => e.PedidoData).HasColumnName("pedido_data");
             entity.Property(e => e.PedidoQuantidade).HasColumnName("pedido_quantidade");
             entity.Property(e => e.ProdutoProdEan).HasColumnName("Produto_prod_ean");
-            entity.Property(e => e.ServiçoServId).HasColumnName("Serviço_serv_id");
+            entity.Property(e => e.ServicoServId).HasColumnName("Servico_serv_id");
+            entity.Property(e => e.ServicoObservação).HasColumnName("pedido_observacao");
+
         });
 
         modelBuilder.Entity<Produto>(entity =>
@@ -158,7 +161,6 @@ public partial class UGBContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("prod_preco");
             entity.Property(e => e.UsuarioUserMat).HasColumnName("Usuario_user_mat");
-
         });
 
         modelBuilder.Entity<SaidaEstoque>(entity =>
@@ -176,9 +178,9 @@ public partial class UGBContext : DbContext
 
         modelBuilder.Entity<Serviço>(entity =>
         {
-            entity.HasKey(e => new { e.ServId, e.FornecedorFornecedorCnpj }).HasName("PK__Serviço__6A366E20137D165B");
+            entity.HasKey(e => new { e.ServId, e.FornecedorFornecedorCnpj }).HasName("PK__Servico__6A366E20137D165B");
 
-            entity.ToTable("Serviço");
+            entity.ToTable("Servico");
 
             entity.Property(e => e.ServId).HasColumnName("serv_id");
             entity.Property(e => e.FornecedorFornecedorCnpj).HasColumnName("Fornecedor_fornecedor_CNPJ");
@@ -195,9 +197,6 @@ public partial class UGBContext : DbContext
                 .HasColumnName("serv_prazo");
             entity.Property(e => e.UsuarioUserMat).HasColumnName("Usuario_user_mat");
 
-            entity.HasOne(d => d.FornecedorFornecedorCnpjNavigation).WithMany(p => p.Serviços)
-                .HasForeignKey(d => d.FornecedorFornecedorCnpj)
-                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         modelBuilder.Entity<Usuario>(entity =>
@@ -228,6 +227,23 @@ public partial class UGBContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("user_senha");
         });
+
+        modelBuilder.Entity<Estoque>(entity =>
+{
+    entity.ToTable("Estoque");
+
+    entity.Property(e => e.EstoqueId).HasColumnName("estoque_id");
+    entity.Property(e => e.Quantidade).HasColumnName("estoque_quantidade");
+    entity.Property(e => e.ProdutoProdEan).HasColumnName("Produto_prod_ean");
+
+    entity.HasKey(e => e.EstoqueId);
+    entity.HasOne(e => e.Produto)
+        .WithMany()
+        .HasForeignKey(e => e.ProdutoProdEan)
+        .OnDelete(DeleteBehavior.Cascade)
+        .HasConstraintName("fk_Estoque_Produto1");
+});
+
 
         OnModelCreatingPartial(modelBuilder);
     }

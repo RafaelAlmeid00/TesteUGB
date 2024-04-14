@@ -17,7 +17,4 @@ public partial class Serviço
 
     public int FornecedorFornecedorCnpj { get; set; }
 
-    public virtual Fornecedor FornecedorFornecedorCnpjNavigation { get; set; } = null!;
-
-    public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
 }

@@ -1,12 +1,19 @@
 @model UGB.Data.Produto
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Edit";
-}
+var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<h1>Edit</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
-<h4>Produto</h4>
+<h1>Editar</h1>
+
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,41 +21,42 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ProdEan" />
             <div class="form-group">
-                <label asp-for="ProdNome" class="control-label"></label>
+                <label asp-for="ProdNome" class="control-label">Nome</label>
                 <input asp-for="ProdNome" class="form-control" />
                 <span asp-validation-for="ProdNome" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProdPreco" class="control-label"></label>
+                <label asp-for="ProdPreco" class="control-label">Preço</label>
                 <input asp-for="ProdPreco" class="form-control" />
                 <span asp-validation-for="ProdPreco" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProdFabricante" class="control-label"></label>
+                <label asp-for="ProdFabricante" class="control-label">Fabricante</label>
                 <input asp-for="ProdFabricante" class="form-control" />
                 <span asp-validation-for="ProdFabricante" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProdEstoqueminimo" class="control-label"></label>
+                <label asp-for="ProdEstoqueminimo" class="control-label">Estoque Minimo</label>
                 <input asp-for="ProdEstoqueminimo" class="form-control" />
                 <span asp-validation-for="ProdEstoqueminimo" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="UsuarioUserMat" class="control-label"></label>
                 <select asp-for="UsuarioUserMat" class="form-control" asp-items="ViewBag.UsuarioUserMat"></select>
                 <span asp-validation-for="UsuarioUserMat" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar</a>
 </div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 }

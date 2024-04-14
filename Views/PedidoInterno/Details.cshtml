@@ -1,48 +1,57 @@
 @model UGB.Data.PedidoInterno
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Details";
+
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+    <h1>Detalhes</h1>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PedidoQuantidade)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PedidoQuantidade)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.PedidoData)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PedidoData)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ProdutoProdEan)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ProdutoProdEan)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ServicoServId)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ServicoServId)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UsuarioUserMatNavigation.UserMat)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.PedidoId">Editar</a> |
+        <a asp-action="Index">Voltar</a>
+    </div>
 }
-
-<h1>Details</h1>
-
-<div>
-    <h4>PedidoInterno</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PedidoQuantidade)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PedidoQuantidade)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PedidoData)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PedidoData)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProdutoProdEan)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProdutoProdEan)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ServiçoServId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ServiçoServId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UsuarioUserMatNavigation.UserMat)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>

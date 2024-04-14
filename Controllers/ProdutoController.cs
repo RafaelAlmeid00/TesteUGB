@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using UGB.Data;
 
 namespace UGB.Controllers
@@ -24,58 +25,59 @@ namespace UGB.Controllers
         [HttpGet("Index")]
         public async Task<IActionResult> Index()
         {
-            var uGBContext = _context.Produtos.Include(p => p.UsuarioUserMatNavigation);
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(await _context.Produtos.ToListAsync());
         }
 
         // GET: Produto/Details/5
         [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var produto = await _context.Produtos
-                .Include(p => p.UsuarioUserMatNavigation)
-                .FirstOrDefaultAsync(m => m.ProdEan == id);
+            var produto = await _context.Produtos.FirstOrDefaultAsync(m => m.ProdEan == id);
             if (produto == null)
             {
                 return NotFound();
             }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
 
             return View(produto);
         }
 
         // GET: Produto/Create
-        [HttpGet("Create/n")]
+        [HttpGet("Create")]
         public IActionResult Create()
         {
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat");
             return View();
         }
 
         // POST: Produto/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost("Create/Novo")]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProdEan,ProdNome,ProdPreco,ProdFabricante,ProdEstoqueminimo,UsuarioUserMat")] Produto produto)
+        public async Task<IActionResult> Create([FromForm] Produto produto)
         {
+
             if (ModelState.IsValid)
             {
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Usuario").ToString());
+                produto.UsuarioUserMat = usuario.UserMat;
                 _context.Add(produto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", produto.UsuarioUserMat);
+
             return View(produto);
         }
 
         // GET: Produto/Edit/5
         [HttpGet("Edit/{id}")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null)
             {
@@ -87,16 +89,15 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", produto.UsuarioUserMat);
             return View(produto);
         }
 
         // POST: Produto/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProdEan,ProdNome,ProdPreco,ProdFabricante,ProdEstoqueminimo,UsuarioUserMat")] Produto produto)
+        public async Task<IActionResult> Edit(string id, [FromForm] Produto produto)
         {
             if (id != produto.ProdEan)
             {
@@ -130,28 +131,26 @@ namespace UGB.Controllers
         // GET: Produto/Delete/5
         [HttpGet("Delete/{id}")]
 
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var produto = await _context.Produtos
-                .Include(p => p.UsuarioUserMatNavigation)
-                .FirstOrDefaultAsync(m => m.ProdEan == id);
+            var produto = await _context.Produtos.FirstOrDefaultAsync(m => m.ProdEan == id);
             if (produto == null)
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(produto);
         }
 
         // POST: Produto/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var produto = await _context.Produtos.FindAsync(id);
             if (produto != null)
@@ -163,7 +162,7 @@ namespace UGB.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProdutoExists(int id)
+        private bool ProdutoExists(string id)
         {
             return _context.Produtos.Any(e => e.ProdEan == id);
         }

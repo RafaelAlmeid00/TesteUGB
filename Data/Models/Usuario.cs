@@ -5,23 +5,23 @@ public class Usuario : IUsuario
 {
     public Usuario()
     {
-        UserMat = 0;
-        UserNome = "admin";
-        UserEmail = "admin";
-        UserSenha = "admin";
-        UserDepartamento = "admin";
+        UserMat = null;
+        UserNome = null;
+        UserEmail = null;
+        UserSenha = null;
+        UserDepartamento = null;
     }
 
-    public int UserMat { get; set; }
-    public string UserNome { get; set; }
-    public string UserEmail { get; set; }
-    public string UserSenha { get; set; }
-    public string UserDepartamento { get; set; }
+    public string? UserMat { get; set; }
+    public string? UserNome { get; set; }
+    public string? UserEmail { get; set; }
+    public string? UserSenha { get; set; }
+    public string? UserDepartamento { get; set; }
 }
 
 
 public class UsuarioLogin : IUsuarioLogin
 {
-    public int UserMat { get; set; }
+    public required string UserMat { get; set; }
     public required string UserSenha { get; set; }
 }

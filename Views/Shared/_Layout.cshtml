@@ -1,8 +1,10 @@
 ﻿@using Newtonsoft.Json
+@using UGB.Factory
 
 @{
-    var usuario = new Usuario();
-    @if (usuario != null && usuario.UserMat != 0)
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create();
+    @if (TempData["Usuario"] != null)
     {
         usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
     }
@@ -21,7 +23,7 @@
 
     <body>
         <header>
-            @if (usuario != null && usuario.UserMat != 0)
+            @if (usuario != null && usuario.UserMat != null)
             {
                 <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
                     <div class="container-fluid">
@@ -44,16 +46,20 @@
                                         asp-action="Index">Produto</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Serviço"
+                                        asp-action="Index">Serviço</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Fornecedor"
                                         asp-action="Index">Fornecedor</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="PedidoInterno"
-                                        asp-action="Index">Pedido Interno</a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="OrdemCompra"
                                         asp-action="Index">Ordem de Compra</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Estoque"
+                                        asp-action="Index">Estoque</a>
                                 </li>
                             </ul>
                         </div>
@@ -75,7 +81,8 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="Index">Cadastrar-se</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Usuario"
+                                        asp-action="Index">Cadastrar-se</a>
                                 </li>
                             </ul>
                         </div>
@@ -86,14 +93,11 @@
         <div class="container">
             <main role="main" class="pb-3">
                 @RenderBody()
+
             </main>
+
         </div>
 
-        <footer class="border-top footer text-muted">
-            <div class="container">
-                &copy; 2024 - UGB - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-        </footer>
         <script src="~/lib/jquery/dist/jquery.min.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UGB.Data;
+using UGB.Factory;
+using UGB.Services;
 
 namespace UGB.Controllers
 {
@@ -25,7 +27,7 @@ namespace UGB.Controllers
 
         // GET: Usuario/Details/5
         [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null)
             {
@@ -38,7 +40,7 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(usuario);
         }
 
@@ -46,6 +48,7 @@ namespace UGB.Controllers
         [HttpGet("Create")]
         public IActionResult Create()
         {
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View();
         }
 
@@ -55,6 +58,9 @@ namespace UGB.Controllers
         {
             if (ModelState.IsValid)
             {
+                var cryptoFactory = new CryptoFactory(null, usuario.UserSenha);
+                var crypto = cryptoFactory.Create();
+                usuario.UserSenha = crypto.Encrypt();
                 _context.Add(usuario);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -64,7 +70,7 @@ namespace UGB.Controllers
 
         // GET: Usuario/Edit/5
         [HttpGet("Edit/{id}")]
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null)
             {
@@ -76,13 +82,14 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(usuario);
         }
 
         // POST: Usuario/Edit/5
         [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [FromForm] Usuario usuario)
+        public async Task<IActionResult> Edit(string id, [FromForm] Usuario usuario)
         {
             if (id != usuario.UserMat)
             {
@@ -93,6 +100,9 @@ namespace UGB.Controllers
             {
                 try
                 {
+                    var cryptoFactory = new CryptoFactory(null, usuario.UserSenha);
+                    var crypto = cryptoFactory.Create();
+                    usuario.UserSenha = crypto.Encrypt();
                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
                 }
@@ -114,7 +124,7 @@ namespace UGB.Controllers
 
         // GET: Usuario/Delete/5
         [HttpGet("Delete/{id}")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string? id)
         {
             if (id == null)
             {
@@ -127,14 +137,14 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(usuario);
         }
 
         // POST: Usuario/Delete/5
         [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario != null)
@@ -146,7 +156,7 @@ namespace UGB.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UsuarioExists(int id)
+        private bool UsuarioExists(string id)
         {
             return _context.Usuarios.Any(e => e.UserMat == id);
         }

@@ -9,6 +9,8 @@ using UGB.Data;
 
 namespace UGB.Controllers
 {
+    [Route("Serviço/")]
+    [ApiController]
     public class ServiçoController : Controller
     {
         private readonly UGBContext _context;
@@ -19,10 +21,11 @@ namespace UGB.Controllers
         }
 
         // GET: Serviço
+        [HttpGet("Index")]
         public async Task<IActionResult> Index()
         {
-            var uGBContext = _context.Serviços.Include(s => s.FornecedorFornecedorCnpjNavigation).Include(s => s.UsuarioUserMatNavigation);
-            return View(await uGBContext.ToListAsync());
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
+            return View(await _context.Serviços.ToListAsync());
         }
 
         // GET: Serviço/Details/5
@@ -33,10 +36,7 @@ namespace UGB.Controllers
                 return NotFound();
             }
 
-            var serviço = await _context.Serviços
-                .Include(s => s.FornecedorFornecedorCnpjNavigation)
-                .Include(s => s.UsuarioUserMatNavigation)
-                .FirstOrDefaultAsync(m => m.ServId == id);
+            var serviço = await _context.Serviços.FirstOrDefaultAsync(m => m.ServId == id);
             if (serviço == null)
             {
                 return NotFound();
@@ -134,10 +134,7 @@ namespace UGB.Controllers
                 return NotFound();
             }
 
-            var serviço = await _context.Serviços
-                .Include(s => s.FornecedorFornecedorCnpjNavigation)
-                .Include(s => s.UsuarioUserMatNavigation)
-                .FirstOrDefaultAsync(m => m.ServId == id);
+            var serviço = await _context.Serviços.FirstOrDefaultAsync(m => m.ServId == id);
             if (serviço == null)
             {
                 return NotFound();

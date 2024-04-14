@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using UGB.Interface;
 
 namespace UGB.Data
 {
-public partial class Produto
+public partial class Produto : IProduto
 {
-    public int ProdEan { get; set; }
+    public required string ProdEan { get; set; }
 
     public string? ProdNome { get; set; }
 
@@ -15,8 +14,7 @@ public partial class Produto
 
     public string? ProdEstoqueminimo { get; set; }
 
-    public int UsuarioUserMat { get; set; }
+    public string? UsuarioUserMat { get; set; }
 
-    public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
-}
+    }
 }

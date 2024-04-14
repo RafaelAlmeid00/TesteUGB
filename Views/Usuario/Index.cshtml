@@ -1,13 +1,19 @@
 @using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+
 @model IEnumerable<UGB.Data.Usuario>
 
 @{
     ViewData["Title"] = "Index";
-    var usuario = new Usuario();
-    @if (usuario != null && usuario.UserMat != 0)
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+
+    @if (TempData["Usuario"] != null)
     {
         usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
     }
+
 
 
     <h1 class="title">Usuários</h1>
@@ -15,7 +21,7 @@
     <button class="button button-create">
         <a asp-action="Create" class="text">Criar Usuário</a>
     </button>
-    @if (usuario != null && usuario.UserMat != 0)
+    @if (usuario != null && usuario.UserMat != null)
     {
         <table class="table">
             <thead>
@@ -47,8 +53,8 @@
                             @Html.DisplayFor(modelItem => item.UserDepartamento)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-route-id="@item.UserMat">Editar</a> |
-                            <a asp-action="Details" asp-route-id="@item.UserMat">Detalhes</a> |
+                            <a asp-action="Edit" asp-route-id="@item.UserMat">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.UserMat">Detalhes</a>
                             <a asp-action="Delete" asp-route-id="@item.UserMat">Deletar</a>
                         </td>
                     </tr>

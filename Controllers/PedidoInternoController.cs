@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +18,7 @@ namespace UGB.Controllers
         public async Task<IActionResult> Index()
         {
             var uGBContext = _context.PedidoInternos.Include(p => p.UsuarioUserMatNavigation);
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(await uGBContext.ToListAsync());
         }
 
@@ -40,7 +37,7 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(pedidoInterno);
         }
 
@@ -48,12 +45,11 @@ namespace UGB.Controllers
         public IActionResult Create()
         {
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat");
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View();
         }
 
         // POST: PedidoInterno/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PedidoId,PedidoQuantidade,PedidoData,UsuarioUserMat,ProdutoProdEan,ServiçoServId")] PedidoInterno pedidoInterno)
@@ -81,13 +77,13 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
+
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", pedidoInterno.UsuarioUserMat);
             return View(pedidoInterno);
         }
 
         // POST: PedidoInterno/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PedidoId,PedidoQuantidade,PedidoData,UsuarioUserMat,ProdutoProdEan,ServiçoServId")] PedidoInterno pedidoInterno)
@@ -136,7 +132,7 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(pedidoInterno);
         }
 

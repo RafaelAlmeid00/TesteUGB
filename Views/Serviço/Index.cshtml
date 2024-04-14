@@ -21,13 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.ServPrazo)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FornecedorFornecedorCnpjNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -41,12 +34,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ServPrazo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FornecedorFornecedorCnpjNavigation.FornecedorCnpj)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioUserMatNavigation.UserMat)
             </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |

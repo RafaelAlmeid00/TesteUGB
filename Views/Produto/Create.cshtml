@@ -1,59 +1,66 @@
 @model UGB.Data.Produto
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Create";
-}
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<h1>Create</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+    <h1>Criar</h1>
 
-<h4>Produto</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProdEan" class="control-label"></label>
-                <input asp-for="ProdEan" class="form-control" />
-                <span asp-validation-for="ProdEan" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProdNome" class="control-label"></label>
-                <input asp-for="ProdNome" class="form-control" />
-                <span asp-validation-for="ProdNome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProdPreco" class="control-label"></label>
-                <input asp-for="ProdPreco" class="form-control" />
-                <span asp-validation-for="ProdPreco" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProdFabricante" class="control-label"></label>
-                <input asp-for="ProdFabricante" class="form-control" />
-                <span asp-validation-for="ProdFabricante" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProdEstoqueminimo" class="control-label"></label>
-                <input asp-for="ProdEstoqueminimo" class="form-control" />
-                <span asp-validation-for="ProdEstoqueminimo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioUserMat" class="control-label"></label>
-                <select asp-for="UsuarioUserMat" class="form-control" asp-items="ViewBag.UsuarioUserMat"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ProdEan" class="control-label">EAN</label>
+                    <input asp-for="ProdEan" class="form-control" />
+                    <span asp-validation-for="ProdEan" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProdNome" class="control-label">Nome</label>
+                    <input asp-for="ProdNome" class="form-control" />
+                    <span asp-validation-for="ProdNome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProdPreco" class="control-label">Preço</label>
+                    <input asp-for="ProdPreco" class="form-control" type="number" />
+                    <span asp-validation-for="ProdPreco" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProdFabricante" class="control-label">Fabricante</label>
+                    <input asp-for="ProdFabricante" class="form-control" />
+                    <span asp-validation-for="ProdFabricante" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProdEstoqueminimo" class="control-label">Estoque Minimo</label>
+                    <input asp-for="ProdEstoqueminimo" class="form-control" type="number"/>
+                    <span asp-validation-for="ProdEstoqueminimo" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="UsuarioUserMat" class="control-label">Usuário</label>
+                    <input asp-for="UsuarioUserMat" class="form-control" value="@usuario.UserMat" disabled />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Voltar</a>
+    </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
     }
 }

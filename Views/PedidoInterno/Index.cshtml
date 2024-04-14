@@ -1,59 +1,63 @@
 @model IEnumerable<UGB.Data.PedidoInterno>
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Index";
-}
 
-<h1>Index</h1>
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.PedidoQuantidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PedidoData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdutoProdEan)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServiçoServId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PedidoQuantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PedidoData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdutoProdEan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServiçoServId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioUserMatNavigation.UserMat)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+    <button class="button button-create">
+        <a asp-controller="PedidoInterno" asp-action="Create" class="text">Criar Pedido Interno</a>
+    </button>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Quantidade
+                </th>
+                <th>
+                    Data
+                </th>
+                <th>
+                    Produto
+                </th>
+                <th>
+                    Serviço
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PedidoQuantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PedidoData)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdutoProdEan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServicoServId)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.PedidoId">Editar</a>
+                        <a asp-action="Details" asp-route-id="@item.PedidoId">Detalhes</a>
+                        <a asp-action="Delete" asp-route-id="@item.PedidoId">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

@@ -22,10 +22,12 @@ namespace UGB.Controllers
         }
 
         [HttpGet("/")]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
+            var order = JsonConvert.SerializeObject(await _context.PedidoInternos.ToListAsync());
+            HttpContext.Session.SetString("PedidoInterno", order);
+            TempData["PedidoInterno"] = HttpContext.Session.GetString("PedidoInterno");
             return View();
         }
         [HttpGet("Privacy")]
@@ -37,37 +39,55 @@ namespace UGB.Controllers
         }
 
         // POST: Home/Login
-        [HttpPost("Login")]
         public async Task<IActionResult> Login([FromForm] UsuarioLogin usuario)
         {
             if (ModelState.IsValid)
             {
-                var userAuthenticated = await _context.Usuarios.FirstOrDefaultAsync(u => u.UserMat == usuario.UserMat && u.UserSenha == usuario.UserSenha);
-                Console.WriteLine(userAuthenticated);
+                var userAuthenticated = await _context.Usuarios.FirstOrDefaultAsync(u => u.UserMat == usuario.UserMat);
 
                 if (userAuthenticated != null)
                 {
-                    var authFactory = new AuthFactory(userAuthenticated);
-                    var auth = authFactory.Create();
-                    var token = auth.CreateToken();
-                    Console.WriteLine(token);
-                    HttpContext.Session.SetString("AuthToken", token);
+                    var cryptoFactory = new CryptoFactory(userAuthenticated.UserSenha, usuario.UserSenha);
+                    var crypto = cryptoFactory.Create();
+                    var decrypt = crypto.Decrypt();
 
-                    var usuarioFactory = new UsuarioFactory();
-                    var viewUser = (Usuario)usuarioFactory.Create();
+                    if (decrypt)
+                    {
+                        var authFactory = new AuthFactory(userAuthenticated);
+                        var auth = authFactory.Create();
+                        var token = auth.CreateToken();
+                        HttpContext.Session.SetString("AuthToken", token);
 
-                    viewUser.UserMat = userAuthenticated.UserMat;
-                    viewUser.UserNome = userAuthenticated.UserNome;
-                    viewUser.UserEmail = userAuthenticated.UserEmail;
-                    viewUser.UserSenha = userAuthenticated.UserSenha;
-                    viewUser.UserDepartamento = userAuthenticated.UserDepartamento;
-                    var usuarioJson = JsonConvert.SerializeObject(viewUser);
-                    HttpContext.Session.SetString("Usuario", usuarioJson);
-                    TempData["Usuario"] = usuarioJson;
+                        var usuarioFactory = new UsuarioFactory();
+                        var viewUser = (Usuario)usuarioFactory.Create();
+                        viewUser.UserMat = userAuthenticated.UserMat;
+                        viewUser.UserNome = userAuthenticated.UserNome;
+                        viewUser.UserEmail = userAuthenticated.UserEmail;
+                        viewUser.UserSenha = userAuthenticated.UserSenha;
+                        viewUser.UserDepartamento = userAuthenticated.UserDepartamento;
+
+                        var usuarioJson = JsonConvert.SerializeObject(viewUser);
+                        HttpContext.Session.SetString("Usuario", usuarioJson);
+                        TempData["Usuario"] = usuarioJson;
+
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        var errorEncrypt = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Erro ao logar!" };
+                        TempData["ErrorView"] = JsonConvert.SerializeObject(errorEncrypt);
+                        return RedirectToAction("Index");
+                    }
+                }
+                else
+                {
+                    var errorFind = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Erro ao logar!" };
+                    TempData["ErrorView"] = JsonConvert.SerializeObject(errorFind);
                     return RedirectToAction("Index");
-
                 }
             }
+            var errorAll = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Erro ao logar!" };
+            TempData["ErrorView"] = JsonConvert.SerializeObject(errorAll);
             return RedirectToAction("Index");
         }
 

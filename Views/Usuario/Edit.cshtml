@@ -1,52 +1,63 @@
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @model UGB.Data.Usuario
 
 @{
     ViewData["Title"] = "Edit";
-}
 
-<h1>Editar</h1>
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div class="row-form">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="UserMat" />
-                <div class="form-group">
-                    <label asp-for="UserNome" class="control-label">Nome</label>
-                    <input asp-for="UserNome" class="form-control" />
-                    <span asp-validation-for="UserNome" class="text-danger"></span>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+    <h1>Editar</h1>
+
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div class="row-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UserMat" />
+                    <div class="form-group">
+                        <label asp-for="UserNome" class="control-label">Nome</label>
+                        <input asp-for="UserNome" class="form-control" />
+                        <span asp-validation-for="UserNome" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="UserEmail" class="control-label">Email</label>
+                        <input asp-for="UserEmail" class="form-control" />
+                        <span asp-validation-for="UserEmail" class="text-danger"></span>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="UserEmail" class="control-label">Email</label>
-                    <input asp-for="UserEmail" class="form-control" />
-                    <span asp-validation-for="UserEmail" class="text-danger"></span>
+                    <label asp-for="UserSenha" class="control-label">Senha</label>
+                    <input asp-for="UserSenha" class="form-control" />
+                    <span asp-validation-for="UserSenha" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserSenha" class="control-label">Senha</label>
-                <input asp-for="UserSenha" class="form-control" />
-                <span asp-validation-for="UserSenha" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserDepartamento" class="control-label">Departamento</label>
-                <input asp-for="UserDepartamento" class="form-control" />
-                <span asp-validation-for="UserDepartamento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="UserDepartamento" class="control-label">Departamento</label>
+                    <input asp-for="UserDepartamento" class="form-control" />
+                    <span asp-validation-for="UserDepartamento" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Voltar</a>
+    </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
     }
 }

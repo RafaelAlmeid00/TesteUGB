@@ -4,7 +4,7 @@ namespace UGB.Interface
 {
     public interface IUsuario
     {
-        int UserMat { get; set; }
+        string UserMat { get; set; }
         string UserNome { get; set; }
         string UserEmail { get; set; }
         string UserSenha { get; set; }
@@ -13,7 +13,7 @@ namespace UGB.Interface
 
     public interface IUsuarioLogin
     {
-        int UserMat { get; set; }
+        string UserMat { get; set; }
         string UserSenha { get; set; }
 
     }

@@ -1,22 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace UGB.Data
 {
-public partial class PedidoInterno
-{
-    public int PedidoId { get; set; }
+    public class PedidoInterno
+    {
 
-    public int PedidoQuantidade { get; set; }
+        public PedidoInterno()
+        {
+            PedidoId = 0;
+            PedidoQuantidade = 0;
+            PedidoData = DateOnly.FromDateTime(DateTime.Today);
+            UsuarioUserMat = null;
+            ProdutoProdEan = null;
+            ServicoServId = null;
+            ServicoObservação = null;
+        }
 
-    public DateOnly PedidoData { get; set; }
+        public int PedidoId { get; set; }
 
-    public int UsuarioUserMat { get; set; }
+        public int PedidoQuantidade { get; set; }
 
-    public int? ProdutoProdEan { get; set; }
+        public DateOnly PedidoData = DateOnly.FromDateTime(DateTime.Today);
 
-    public int? ServiçoServId { get; set; }
+        public string? UsuarioUserMat { get; set; }
 
-    public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
-}
+        public string? ProdutoProdEan { get; set; }
+        public int? ServicoServId { get; set; }
+        public string? ServicoObservação { get; set; }
+
+        public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
+    }
 }

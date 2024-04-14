@@ -1,9 +1,11 @@
 
 namespace UGB.Services;
 using BCrypt.Net;
-public class Crypto
+using UGB.Interface;
+
+public class Crypto : ICrypto
 {
-    private readonly string _hash;
+    private readonly string? _hash;
     private readonly string _password;
 
     public Crypto(string hash, string password)
@@ -11,7 +13,7 @@ public class Crypto
         _hash = hash;
         _password = password;
     }
-    public string Encripty()
+    public string Encrypt()
     {
         var passwordHash = BCrypt.HashPassword(_password);
         return passwordHash;
@@ -22,4 +24,5 @@ public class Crypto
         var verifyPassword = BCrypt.Verify(_password, _hash);
         return verifyPassword;
     }
+
 }
