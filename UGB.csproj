@@ -10,7 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="axios" Version="0.16.2" />
     <PackageReference Include="BCrypt.Net-Next.StrongName" Version="4.0.3" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core.pt-br" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client.pt-br" Version="6.0.0" />
     <PackageReference Include="Microsoft.DotNet.Scaffolding.Shared" Version="9.0.0-preview.3.24207.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
@@ -25,6 +28,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+    <PackageReference Include="OrchardCore.Translations.pt-BR" Version="1.8.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
   </ItemGroup>

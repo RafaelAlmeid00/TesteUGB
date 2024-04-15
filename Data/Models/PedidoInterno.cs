@@ -1,32 +1,29 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using UGB.Interface;
+
 namespace UGB.Data
 {
-    public class PedidoInterno
+    public class PedidoInterno : IPedidoInterno
     {
+        [Key]
+        public int PedidoId { get; set; } = 0;
+        [Required(ErrorMessage = "Por favor, insira a quantidade.")]
+        public int PedidoQuantidade { get; set; } = 0;
 
-        public PedidoInterno()
-        {
-            PedidoId = 0;
-            PedidoQuantidade = 0;
-            PedidoData = DateOnly.FromDateTime(DateTime.Today);
-            UsuarioUserMat = null;
-            ProdutoProdEan = null;
-            ServicoServId = null;
-            ServicoObservação = null;
-        }
-
-        public int PedidoId { get; set; }
-
-        public int PedidoQuantidade { get; set; }
-
+        [Required(ErrorMessage = "Por favor, insira a data.")]
         public DateOnly PedidoData = DateOnly.FromDateTime(DateTime.Today);
 
-        public string? UsuarioUserMat { get; set; }
+        [ForeignKey("Usuario")]
+        public string? UsuarioUserMat { get; set; } = null;
 
-        public string? ProdutoProdEan { get; set; }
-        public int? ServicoServId { get; set; }
-        public string? ServicoObservação { get; set; }
-
+        [ForeignKey("Produto")]        
+        public string? ProdutoProdEan { get; set; } = null;
+        [ForeignKey("Serviço")]
+        public int? ServicoServId { get; set; } = null;
+        [Required(ErrorMessage = "Por favor, insira a observação.")]
+        public string? ServicoObservação { get; set; } = null;
         public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
     }
+
 }

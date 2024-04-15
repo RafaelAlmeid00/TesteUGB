@@ -12,8 +12,8 @@ using UGB.Data;
 namespace UGB.Migrations
 {
     [DbContext(typeof(UGBContext))]
-    [Migration("20240414192652_Estoque")]
-    partial class Estoque
+    [Migration("20240415015155_InitialMigrations")]
+    partial class InitialMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,12 +61,20 @@ namespace UGB.Migrations
                         .HasColumnType("int")
                         .HasColumnName("entrada_quantidade");
 
+                    b.Property<string>("ProdutoProdEanNavigationProdEan")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<string>("UsuarioUserMatNavigationUserMat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(14)");
+
                     b.HasKey("EntradaId", "UsuarioUserMat", "ProdutoProdEan")
                         .HasName("PK__Entrada___CC134D53AB58E469");
 
-                    b.HasIndex("ProdutoProdEan");
+                    b.HasIndex("ProdutoProdEanNavigationProdEan");
 
-                    b.HasIndex("UsuarioUserMat");
+                    b.HasIndex("UsuarioUserMatNavigationUserMat");
 
                     b.ToTable("Entrada_Estoque", (string)null);
                 });
@@ -75,21 +83,26 @@ namespace UGB.Migrations
                 {
                     b.Property<int>("EstoqueId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("estoque_id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EstoqueId"));
 
-                    b.Property<int>("EstoqueQuantiodade")
-                        .HasColumnType("int");
+                    b.Property<string>("ProdutoProdEan")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)")
+                        .HasColumnName("Produto_prod_ean");
 
-                    b.Property<int>("ProdutoProdEanNavigationProdEan")
-                        .HasColumnType("int");
+                    b.Property<int>("Quantidade")
+                        .HasColumnType("int")
+                        .HasColumnName("estoque_quantidade");
 
                     b.HasKey("EstoqueId");
 
-                    b.HasIndex("ProdutoProdEanNavigationProdEan");
+                    b.HasIndex("ProdutoProdEan");
 
-                    b.ToTable("Estoques");
+                    b.ToTable("Estoque", (string)null);
                 });
 
             modelBuilder.Entity("UGB.Data.Fornecedor", b =>
@@ -160,14 +173,12 @@ namespace UGB.Migrations
                         .HasColumnType("varchar(2)")
                         .HasColumnName("fornecedor_uf");
 
-                    b.Property<int>("UsuarioUserMat")
-                        .HasColumnType("int")
+                    b.Property<string>("UsuarioUserMat")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Usuario_user_mat");
 
                     b.HasKey("FornecedorCnpj")
                         .HasName("PK__Forneced__2BF638797C48E672");
-
-                    b.HasIndex("UsuarioUserMat");
 
                     b.ToTable("Fornecedor", (string)null);
                 });
@@ -194,10 +205,17 @@ namespace UGB.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ordem_quantidade");
 
+                    b.Property<int>("PedidoInternoPedidoId1")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PedidoInternoUsuarioUserMat1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(14)");
+
                     b.HasKey("OrdemId", "PedidoInternoPedidoId", "PedidoInternoUsuarioUserMat")
                         .HasName("PK__Ordem_Co__0E2B5B07C8D4943B");
 
-                    b.HasIndex("PedidoInternoPedidoId", "PedidoInternoUsuarioUserMat");
+                    b.HasIndex("PedidoInternoPedidoId1", "PedidoInternoUsuarioUserMat1");
 
                     b.ToTable("Ordem_Compra", (string)null);
                 });
@@ -208,8 +226,8 @@ namespace UGB.Migrations
                         .HasColumnType("int")
                         .HasColumnName("pedido_id");
 
-                    b.Property<int>("UsuarioUserMat")
-                        .HasColumnType("int")
+                    b.Property<string>("UsuarioUserMat")
+                        .HasColumnType("nvarchar(14)")
                         .HasColumnName("Usuario_user_mat");
 
                     b.Property<DateOnly>("PedidoData")
@@ -220,17 +238,17 @@ namespace UGB.Migrations
                         .HasColumnType("int")
                         .HasColumnName("pedido_quantidade");
 
-                    b.Property<int?>("ProdutoProdEan")
-                        .HasColumnType("int")
+                    b.Property<string>("ProdutoProdEan")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Produto_prod_ean");
 
-                    b.Property<string>("ServiçoObservação")
+                    b.Property<string>("ServicoObservação")
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("pedido_observacao");
 
-                    b.Property<int?>("ServiçoServId")
+                    b.Property<int?>("ServicoServId")
                         .HasColumnType("int")
-                        .HasColumnName("Serviço_serv_id");
+                        .HasColumnName("Servico_serv_id");
 
                     b.HasKey("PedidoId", "UsuarioUserMat")
                         .HasName("PK__Pedido_I__4BAA591F13DFFFA6");
@@ -242,42 +260,46 @@ namespace UGB.Migrations
 
             modelBuilder.Entity("UGB.Data.Produto", b =>
                 {
-                    b.Property<int>("ProdEan")
-                        .HasColumnType("int")
+                    b.Property<string>("ProdEan")
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)")
                         .HasColumnName("prod_ean");
 
                     b.Property<string>("ProdEstoqueminimo")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .IsUnicode(false)
                         .HasColumnType("varchar(45)")
                         .HasColumnName("prod_estoqueminimo");
 
                     b.Property<string>("ProdFabricante")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .IsUnicode(false)
                         .HasColumnType("varchar(45)")
                         .HasColumnName("prod_fabricante");
 
                     b.Property<string>("ProdNome")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .IsUnicode(false)
                         .HasColumnType("varchar(45)")
                         .HasColumnName("prod_nome");
 
                     b.Property<string>("ProdPreco")
+                        .IsRequired()
                         .HasMaxLength(45)
                         .IsUnicode(false)
                         .HasColumnType("varchar(45)")
                         .HasColumnName("prod_preco");
 
-                    b.Property<int>("UsuarioUserMat")
-                        .HasColumnType("int")
+                    b.Property<string>("UsuarioUserMat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("Usuario_user_mat");
 
                     b.HasKey("ProdEan")
                         .HasName("PK__Produto__C12992A8D080D5D4");
-
-                    b.HasIndex("UsuarioUserMat");
 
                     b.ToTable("Produto", (string)null);
                 });
@@ -300,16 +322,23 @@ namespace UGB.Migrations
                         .HasColumnType("date")
                         .HasColumnName("entrada_data");
 
+                    b.Property<string>("ProdutoProdEanNavigationProdEan")
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<int>("SaidaQuantidade")
                         .HasColumnType("int")
                         .HasColumnName("saida_quantidade");
 
+                    b.Property<string>("UsuarioUserMatNavigationUserMat")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(14)");
+
                     b.HasKey("SaidaId", "UsuarioUserMat", "ProdutoProdEan")
                         .HasName("PK__Saida_Es__4EE572A5EB1405E0");
 
-                    b.HasIndex("ProdutoProdEan");
+                    b.HasIndex("ProdutoProdEanNavigationProdEan");
 
-                    b.HasIndex("UsuarioUserMat");
+                    b.HasIndex("UsuarioUserMatNavigationUserMat");
 
                     b.ToTable("Saida_Estoque", (string)null);
                 });
@@ -349,19 +378,16 @@ namespace UGB.Migrations
                         .HasColumnName("Usuario_user_mat");
 
                     b.HasKey("ServId", "FornecedorFornecedorCnpj")
-                        .HasName("PK__Serviço__6A366E20137D165B");
+                        .HasName("PK__Servico__6A366E20137D165B");
 
-                    b.HasIndex("FornecedorFornecedorCnpj");
-
-                    b.HasIndex("UsuarioUserMat");
-
-                    b.ToTable("Serviço", (string)null);
+                    b.ToTable("Servico", (string)null);
                 });
 
             modelBuilder.Entity("UGB.Data.Usuario", b =>
                 {
-                    b.Property<int>("UserMat")
-                        .HasColumnType("int")
+                    b.Property<string>("UserMat")
+                        .HasMaxLength(14)
+                        .HasColumnType("nvarchar(14)")
                         .HasColumnName("user_mat");
 
                     b.Property<string>("UserDepartamento")
@@ -405,13 +431,13 @@ namespace UGB.Migrations
                 {
                     b.HasOne("UGB.Data.Produto", "ProdutoProdEanNavigation")
                         .WithMany()
-                        .HasForeignKey("ProdutoProdEan")
+                        .HasForeignKey("ProdutoProdEanNavigationProdEan")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("UGB.Data.Usuario", "UsuarioUserMatNavigation")
                         .WithMany()
-                        .HasForeignKey("UsuarioUserMat")
+                        .HasForeignKey("UsuarioUserMatNavigationUserMat")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -422,31 +448,21 @@ namespace UGB.Migrations
 
             modelBuilder.Entity("UGB.Data.Estoque", b =>
                 {
-                    b.HasOne("UGB.Data.Produto", "ProdutoProdEanNavigation")
+                    b.HasOne("UGB.Data.Produto", "Produto")
                         .WithMany()
-                        .HasForeignKey("ProdutoProdEanNavigationProdEan")
+                        .HasForeignKey("ProdutoProdEan")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_Estoque_Produto1");
 
-                    b.Navigation("ProdutoProdEanNavigation");
-                });
-
-            modelBuilder.Entity("UGB.Data.Fornecedor", b =>
-                {
-                    b.HasOne("UGB.Data.Usuario", "UsuarioUserMatNavigation")
-                        .WithMany()
-                        .HasForeignKey("UsuarioUserMat")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UsuarioUserMatNavigation");
+                    b.Navigation("Produto");
                 });
 
             modelBuilder.Entity("UGB.Data.OrdemCompra", b =>
                 {
                     b.HasOne("UGB.Data.PedidoInterno", "PedidoInterno")
                         .WithMany()
-                        .HasForeignKey("PedidoInternoPedidoId", "PedidoInternoUsuarioUserMat")
+                        .HasForeignKey("PedidoInternoPedidoId1", "PedidoInternoUsuarioUserMat1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -464,57 +480,21 @@ namespace UGB.Migrations
                     b.Navigation("UsuarioUserMatNavigation");
                 });
 
-            modelBuilder.Entity("UGB.Data.Produto", b =>
-                {
-                    b.HasOne("UGB.Data.Usuario", "UsuarioUserMatNavigation")
-                        .WithMany()
-                        .HasForeignKey("UsuarioUserMat")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UsuarioUserMatNavigation");
-                });
-
             modelBuilder.Entity("UGB.Data.SaidaEstoque", b =>
                 {
                     b.HasOne("UGB.Data.Produto", "ProdutoProdEanNavigation")
                         .WithMany()
-                        .HasForeignKey("ProdutoProdEan")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProdutoProdEanNavigationProdEan");
 
                     b.HasOne("UGB.Data.Usuario", "UsuarioUserMatNavigation")
                         .WithMany()
-                        .HasForeignKey("UsuarioUserMat")
+                        .HasForeignKey("UsuarioUserMatNavigationUserMat")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("ProdutoProdEanNavigation");
 
                     b.Navigation("UsuarioUserMatNavigation");
-                });
-
-            modelBuilder.Entity("UGB.Data.Serviço", b =>
-                {
-                    b.HasOne("UGB.Data.Fornecedor", "FornecedorFornecedorCnpjNavigation")
-                        .WithMany("Serviços")
-                        .HasForeignKey("FornecedorFornecedorCnpj")
-                        .IsRequired();
-
-                    b.HasOne("UGB.Data.Usuario", "UsuarioUserMatNavigation")
-                        .WithMany()
-                        .HasForeignKey("UsuarioUserMat")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FornecedorFornecedorCnpjNavigation");
-
-                    b.Navigation("UsuarioUserMatNavigation");
-                });
-
-            modelBuilder.Entity("UGB.Data.Fornecedor", b =>
-                {
-                    b.Navigation("Serviços");
                 });
 #pragma warning restore 612, 618
         }

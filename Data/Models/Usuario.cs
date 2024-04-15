@@ -1,27 +1,30 @@
-﻿using UGB.Interface;
+﻿using System.ComponentModel.DataAnnotations;
+using UGB.Interface;
 
 namespace UGB.Data;
 public class Usuario : IUsuario
 {
-    public Usuario()
-    {
-        UserMat = null;
-        UserNome = null;
-        UserEmail = null;
-        UserSenha = null;
-        UserDepartamento = null;
-    }
+    [Key]
+    [MinLength(14, ErrorMessage = "A matricula deve ter 14 caracteres.")]
+    public string? UserMat { get; set; } = null;
 
-    public string? UserMat { get; set; }
-    public string? UserNome { get; set; }
-    public string? UserEmail { get; set; }
-    public string? UserSenha { get; set; }
-    public string? UserDepartamento { get; set; }
+    [Required(ErrorMessage = "Por favor, insira o nome.")]
+    public string? UserNome { get; set; } = null;
+    [EmailAddress(ErrorMessage = "Por favor, insira um email válido.")]
+    [Required(ErrorMessage = "Por favor, insira o email.")]
+    public string? UserEmail { get; set; } = null;
+    [Required(ErrorMessage = "Por favor, insira a senha.")]
+    public string? UserSenha { get; set; } = null;
+    [Required(ErrorMessage = "Por favor, insira o departamento.")]
+    public string? UserDepartamento { get; set; } = null;
 }
 
 
 public class UsuarioLogin : IUsuarioLogin
 {
+    [Required(ErrorMessage = "Por favor, insira a matricula.")]
+    [StringLength(14, ErrorMessage = "A matricula deve ter 14 caracteres.")]
     public required string UserMat { get; set; }
+    [Required(ErrorMessage = "Por favor, insira a senha.")]
     public required string UserSenha { get; set; }
 }

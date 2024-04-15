@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UGB.Data;
 using UGB.Factory;
-using UGB.Services;
 
 namespace UGB.Controllers
 {
