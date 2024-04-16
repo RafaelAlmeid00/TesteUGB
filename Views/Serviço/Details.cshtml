@@ -1,35 +1,52 @@
 @model UGB.Data.Serviço
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Details";
+
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+
+    <h1>Detalhes</h1>
+
+    <div>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ServNome)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ServNome)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ServDescricao)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ServDescricao)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ServPrazo)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ServPrazo)
+            </dd>
+            <dt class="col-sm-2">
+                CNPJ
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FornecedorFornecedorCnpj)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model?.ServId">Editar</a> |
+        <a asp-action="Index">Voltar</a>
+    </div>
 }
-
-<h1>Detalhes</h1>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ServNome)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ServNome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ServDescricao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ServDescricao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ServPrazo)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ServPrazo)
-        </dd>
-    </dl>
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>

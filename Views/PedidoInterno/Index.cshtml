@@ -31,13 +31,15 @@
                 <th>
                     Serviço
                 </th>
-
-                <th></th>
+                <th>
+                    Observação
+                </th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
+
+        @foreach (var item in Model)
+        {
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.PedidoQuantidade)
@@ -46,18 +48,30 @@
                         @Html.DisplayFor(modelItem => item.PedidoData)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ProdutoProdEan)
+                        @Html.DisplayFor(modelItem => item.ProdutoNome)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.ServicoServId)
+                        @Html.DisplayFor(modelItem => item.ServicoNome)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.PedidoId">Editar</a>
-                        <a asp-action="Details" asp-route-id="@item.PedidoId">Detalhes</a>
-                        <a asp-action="Delete" asp-route-id="@item.PedidoId">Deletar</a>
+                        @Html.DisplayFor(modelItem => item.ServicoObservação)
+                    </td>
+
+                    <td>
+                        <a asp-controller="PedidoInterno" asp-action="Edit" asp-route-id="@item.PedidoId">Editar</a> |
+                        <a asp-controller="PedidoInterno" asp-action="Details" asp-route-id="@item.PedidoId">Detalhes</a> |
+                        <a asp-controller="PedidoInterno" asp-action="Delete" asp-route-id="@item.PedidoId">Deletar</a> |
+                        @if (item.ProdutoProdEan != null)
+                        {
+                            <a asp-controller="OrdemCompra" asp-action="Create" asp-route-id="@item.PedidoId">Criar Ordem de Compra</a>
+                        }
+                        @if (item.ServicoServId != null)
+                        {
+                            <a asp-controller="OrdemCompra" asp-action="CreateService" asp-route-id="@item.PedidoId">Criar Ordem de Serviço</a>
+                        }
                     </td>
                 </tr>
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>
 }

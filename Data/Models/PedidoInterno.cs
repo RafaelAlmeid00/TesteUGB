@@ -6,7 +6,7 @@ namespace UGB.Data
 {
     public class PedidoInterno : IPedidoInterno
     {
-        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int PedidoId { get; set; } = 0;
         [Required(ErrorMessage = "Por favor, insira a quantidade.")]
         public int PedidoQuantidade { get; set; } = 0;
@@ -17,13 +17,18 @@ namespace UGB.Data
         [ForeignKey("Usuario")]
         public string? UsuarioUserMat { get; set; } = null;
 
-        [ForeignKey("Produto")]        
+        [ForeignKey("Produto")]
         public string? ProdutoProdEan { get; set; } = null;
         [ForeignKey("Serviço")]
         public int? ServicoServId { get; set; } = null;
-        [Required(ErrorMessage = "Por favor, insira a observação.")]
         public string? ServicoObservação { get; set; } = null;
-        public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
+        [NotMapped]
+        public string? SelectValue { get; set; }
+        [NotMapped]
+        public string? ServicoNome { get; set; }
+        [NotMapped]
+        public string? ProdutoNome { get; set; }
+
     }
 
 }

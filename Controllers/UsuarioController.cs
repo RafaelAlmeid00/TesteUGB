@@ -17,7 +17,7 @@ namespace UGB.Controllers
         }
 
         // GET: Usuario
-        [HttpGet("Index")]
+        [HttpGet("/Usuario")]
         public async Task<IActionResult> Index()
         {
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");

@@ -6,7 +6,7 @@ namespace UGB.Interface
 
         public string? ProdNome { get; set; }
 
-        public string? ProdPreco { get; set; }
+        public decimal? ProdPreco { get; set; }
 
         public string? ProdFabricante { get; set; }
 

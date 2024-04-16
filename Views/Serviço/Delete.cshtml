@@ -1,8 +1,18 @@
 @model UGB.Data.Serviço
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Delete";
-}
+
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
 
 <h1>Deletar</h1>
 
@@ -35,6 +45,7 @@
         <input type="hidden" asp-for="ServId" />
         <input type="hidden" asp-for="FornecedorFornecedorCnpj" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Voltar</a>
     </form>
 </div>
+}

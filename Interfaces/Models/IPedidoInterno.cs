@@ -9,4 +9,6 @@ public interface IPedidoInterno
     string? ProdutoProdEan { get; set; }
     int? ServicoServId { get; set; }
     string? ServicoObservação { get; set; }
+    public string SelectValue { get; set; }
+
 }

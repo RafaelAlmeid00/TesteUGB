@@ -4,7 +4,7 @@ using UGB.Interface;
 
 namespace UGB.Data
 {
-    public partial class Produto : IProduto
+    public class Produto : IProduto
     {
         [Key]
         [StringLength(13, ErrorMessage = "Código EAN só pode ter 13 digitos.")]
@@ -16,7 +16,7 @@ namespace UGB.Data
         public string? ProdNome { get; set; }
         [Required(ErrorMessage = "Por favor, insira o preço.")]
 
-        public string? ProdPreco { get; set; }
+        public decimal? ProdPreco { get; set; }
         [Required(ErrorMessage = "Por favor, insira o fabricante.")]
 
         public string? ProdFabricante { get; set; }

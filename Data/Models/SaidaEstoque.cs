@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace UGB.Data
 {
-public partial class SaidaEstoque
+public class SaidaEstoque
 {
     public int SaidaId { get; set; }
 

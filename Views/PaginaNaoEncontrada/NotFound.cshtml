@@ -1,0 +1,32 @@
+@page
+@{
+    ViewData["Title"] = "Contador";
+}
+
+<div class="text-center" style="margin-top: 60px; display: flex; align-items: center; justify-content: center;">
+    <h1 class="title">Parece que você está perdido...</h1>
+    <p>Vamos te enviar para a página principal em <span id="contador">5</span> segundos.</p>
+</div>
+
+@section Scripts {
+    <script>
+        // Função para iniciar o contador e redirecionar após 5 segundos
+        function iniciarContador() {
+            var segundos = 5;
+            var contadorElemento = document.getElementById('contador');
+
+            var intervalo = setInterval(function() {
+                segundos--;
+                contadorElemento.textContent = segundos;
+
+                if (segundos <= 0) {
+                    clearInterval(intervalo);
+                    window.location.href = '/'; // Redireciona para a raiz do sistema
+                }
+            }, 1000); // Contagem a cada segundo
+        }
+
+        // Chama a função para iniciar o contador quando a página é carregada
+        document.addEventListener('DOMContentLoaded', iniciarContador);
+    </script>
+}

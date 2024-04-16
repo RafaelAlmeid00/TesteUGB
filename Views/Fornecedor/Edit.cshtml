@@ -24,6 +24,11 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="FornecedorCnpj" />
             <div class="form-group">
+                    <label asp-for="FornecedorNome" class="control-label">Nome</label>
+                    <input asp-for="FornecedorNome" class="form-control" />
+                    <span asp-validation-for="FornecedorNome" class="text-danger"></span>
+                </div>
+            <div class="form-group">
                 <label asp-for="FornecedorEmail" class="control-label"></label>
                 <input asp-for="FornecedorEmail" class="form-control" />
                 <span asp-validation-for="FornecedorEmail" class="text-danger"></span>

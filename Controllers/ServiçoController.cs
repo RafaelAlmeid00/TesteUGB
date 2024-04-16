@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using UGB.Data;
+using UGB.Interface;
 
 namespace UGB.Controllers
 {
@@ -17,7 +19,7 @@ namespace UGB.Controllers
         }
 
         // GET: Serviço
-        [HttpGet("Index")]
+        [HttpGet("/Serviço")]
         public async Task<IActionResult> Index()
         {
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
@@ -25,6 +27,7 @@ namespace UGB.Controllers
         }
 
         // GET: Serviço/Details/5
+        [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,35 +40,39 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(serviço);
         }
 
         // GET: Serviço/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
-            ViewData["FornecedorFornecedorCnpj"] = new SelectList(_context.Fornecedors, "FornecedorCnpj", "FornecedorCnpj");
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat");
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
+            ViewData["FornecedorCnpj"] = new SelectList(_context.Fornecedors, "FornecedorCnpj", "FornecedorCnpj");
             return View();
         }
 
         // POST: Serviço/Create
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ServId,ServNome,ServDescricao,ServPrazo,UsuarioUserMat,FornecedorFornecedorCnpj")] Serviço serviço)
+        public async Task<IActionResult> Create([FromForm] Serviço serviço)
         {
             if (ModelState.IsValid)
             {
+                var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Usuario").ToString());
+                serviço.UsuarioUserMat = usuario.UserMat;
+                Console.WriteLine(usuario);
+                Console.WriteLine(serviço);
                 _context.Add(serviço);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FornecedorFornecedorCnpj"] = new SelectList(_context.Fornecedors, "FornecedorCnpj", "FornecedorCnpj", serviço.FornecedorFornecedorCnpj);
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", serviço.UsuarioUserMat);
             return View(serviço);
         }
 
         // GET: Serviço/Edit/5
+        [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,20 +80,20 @@ namespace UGB.Controllers
                 return NotFound();
             }
 
-            var serviço = await _context.Serviços.FindAsync(id);
+            var serviço = await _context.Serviços.FirstOrDefaultAsync(s => s.ServId == id);
             if (serviço == null)
             {
                 return NotFound();
             }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["FornecedorFornecedorCnpj"] = new SelectList(_context.Fornecedors, "FornecedorCnpj", "FornecedorCnpj", serviço.FornecedorFornecedorCnpj);
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", serviço.UsuarioUserMat);
             return View(serviço);
         }
 
         // POST: Serviço/Edit/5
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ServId,ServNome,ServDescricao,ServPrazo,UsuarioUserMat,FornecedorFornecedorCnpj")] Serviço serviço)
+        public async Task<IActionResult> Edit(int? id, [FromForm] Serviço serviço)
         {
             if (id != serviço.ServId)
             {
@@ -97,6 +104,8 @@ namespace UGB.Controllers
             {
                 try
                 {
+                    var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Usuario").ToString());
+                    serviço.UsuarioUserMat = usuario.UserMat;
                     _context.Update(serviço);
                     await _context.SaveChangesAsync();
                 }
@@ -113,12 +122,14 @@ namespace UGB.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["FornecedorFornecedorCnpj"] = new SelectList(_context.Fornecedors, "FornecedorCnpj", "FornecedorCnpj", serviço.FornecedorFornecedorCnpj);
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", serviço.UsuarioUserMat);
             return View(serviço);
         }
 
         // GET: Serviço/Delete/5
+        [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,16 +142,16 @@ namespace UGB.Controllers
             {
                 return NotFound();
             }
-
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(serviço);
         }
 
         // POST: Serviço/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var serviço = await _context.Serviços.FindAsync(id);
+            var serviço = await _context.Serviços.FirstOrDefaultAsync(s => s.ServId == id);
             if (serviço != null)
             {
                 _context.Serviços.Remove(serviço);
@@ -150,7 +161,7 @@ namespace UGB.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ServiçoExists(int id)
+        private bool ServiçoExists(int? id)
         {
             return _context.Serviços.Any(e => e.ServId == id);
         }

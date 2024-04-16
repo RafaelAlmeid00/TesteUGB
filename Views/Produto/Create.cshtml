@@ -34,9 +34,9 @@
                     <span asp-validation-for="ProdPreco" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ProdFabricante" class="control-label">Fabricante</label>
-                    <input asp-for="ProdFabricante" class="form-control" />
-                    <span asp-validation-for="ProdFabricante" class="text-danger"></span>
+                    <label asp-for="ProdFabricante" class="control-label"></label>
+                    <select asp-for="ProdFabricante" class="form-control"
+                        asp-items="ViewBag.Fornecedor"></select>
                 </div>
                 <div class="form-group">
                     <label asp-for="ProdEstoqueminimo" class="control-label">Estoque Minimo</label>

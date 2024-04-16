@@ -3,20 +3,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UGB.Data
 {
-    public class Estoque
+    public class Estoque : IEstoque
     {
-        [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EstoqueId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Por favor, insira a quantidade.")]
         public int Quantidade { get; set; }
 
-        [Required]
-        [StringLength(60)]
         [ForeignKey("Produto")]
-        public required string ProdutoProdEan { get; set; }
-
-        public required Produto Produto { get; set; }
+        public string? ProdutoProdEan { get; set; }
+        [NotMapped]
+        public string? EstoqueMinimo { get; set; }
+        [NotMapped]
+        public string? StatusEstoque { get; set; }
+        [NotMapped]
+        public string? ProdutoNome { get; set; }
     }
+
 }

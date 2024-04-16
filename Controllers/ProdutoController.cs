@@ -18,7 +18,7 @@ namespace UGB.Controllers
         }
 
         // GET: Produto
-        [HttpGet("Index")]
+        [HttpGet("/Produto")]
         public async Task<IActionResult> Index()
         {
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
@@ -50,6 +50,8 @@ namespace UGB.Controllers
         {
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat");
+            ViewData["Fornecedor"] = new SelectList(_context.Fornecedors, "FornecedorNome", "FornecedorNome");
+
             return View();
         }
 
@@ -86,6 +88,7 @@ namespace UGB.Controllers
                 return NotFound();
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
+            ViewData["Fornecedor"] = new SelectList(_context.Fornecedors, "FornecedorNome", "FornecedorNome");
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", produto.UsuarioUserMat);
             return View(produto);
         }

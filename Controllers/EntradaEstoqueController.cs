@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +5,8 @@ using UGB.Data;
 
 namespace UGB.Controllers
 {
+    [Route("EstoqueEntrada/")]
+    [ApiController]
     public class EntradaEstoqueController : Controller
     {
         private readonly UGBContext _context;
@@ -19,6 +17,7 @@ namespace UGB.Controllers
         }
 
         // GET: EntradaEstoque
+        [HttpGet("/EntradaEstoque")]
         public async Task<IActionResult> Index()
         {
             var uGBContext = _context.EntradaEstoques.Include(e => e.ProdutoProdEanNavigation).Include(e => e.UsuarioUserMatNavigation);
@@ -26,6 +25,7 @@ namespace UGB.Controllers
         }
 
         // GET: EntradaEstoque/Details/5
+        [HttpGet("Details/{id}")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +46,8 @@ namespace UGB.Controllers
         }
 
         // GET: EntradaEstoque/Create
-        public IActionResult Create()
+        [HttpGet("Create/{id}")]
+        public IActionResult Create(int? id)
         {
             ViewData["ProdutoProdEan"] = new SelectList(_context.Produtos, "ProdEan", "ProdEan");
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat");
@@ -54,11 +55,9 @@ namespace UGB.Controllers
         }
 
         // POST: EntradaEstoque/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        [HttpPost("Create/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EntradaId,EntradaNf,EntradaDeposito,EntradaQuantidade,EntradaData,UsuarioUserMat,ProdutoProdEan")] EntradaEstoque entradaEstoque)
+        public async Task<IActionResult> Create([FromForm] EntradaEstoque entradaEstoque, int id)
         {
             if (ModelState.IsValid)
             {
@@ -71,62 +70,8 @@ namespace UGB.Controllers
             return View(entradaEstoque);
         }
 
-        // GET: EntradaEstoque/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var entradaEstoque = await _context.EntradaEstoques.FindAsync(id);
-            if (entradaEstoque == null)
-            {
-                return NotFound();
-            }
-            ViewData["ProdutoProdEan"] = new SelectList(_context.Produtos, "ProdEan", "ProdEan", entradaEstoque.ProdutoProdEan);
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", entradaEstoque.UsuarioUserMat);
-            return View(entradaEstoque);
-        }
-
-        // POST: EntradaEstoque/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EntradaId,EntradaNf,EntradaDeposito,EntradaQuantidade,EntradaData,UsuarioUserMat,ProdutoProdEan")] EntradaEstoque entradaEstoque)
-        {
-            if (id != entradaEstoque.EntradaId)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(entradaEstoque);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EntradaEstoqueExists(entradaEstoque.EntradaId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProdutoProdEan"] = new SelectList(_context.Produtos, "ProdEan", "ProdEan", entradaEstoque.ProdutoProdEan);
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", entradaEstoque.UsuarioUserMat);
-            return View(entradaEstoque);
-        }
-
         // GET: EntradaEstoque/Delete/5
+        [HttpGet("Delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +92,7 @@ namespace UGB.Controllers
         }
 
         // POST: EntradaEstoque/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

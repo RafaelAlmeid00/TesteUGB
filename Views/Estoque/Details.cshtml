@@ -1,9 +1,17 @@
 @model UGB.Data.Estoque
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Detalhes";
-}
+ var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 <h1>Detalhes</h1>
 
 <div>
@@ -24,6 +32,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.EstoqueId">Editar</a> |
     <a asp-action="Index">Voltar</a>
 </div>
+}

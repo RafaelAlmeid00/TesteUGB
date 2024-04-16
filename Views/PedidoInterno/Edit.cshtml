@@ -12,47 +12,59 @@
     {
         usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
     }
-<h1>Editar</h1>
+    <h1>Editar</h1>
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PedidoId" />
-            <div class="form-group">
-                <label asp-for="PedidoQuantidade" class="control-label">Quantidade</label>
-                <input asp-for="PedidoQuantidade" class="form-control" />
-                <span asp-validation-for="PedidoQuantidade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PedidoData" class="control-label">Data</label>
-                <input asp-for="PedidoData" class="form-control" />
-                <span asp-validation-for="PedidoData" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="UsuarioUserMat" />
-            <div class="form-group">
-                <label asp-for="ProdutoProdEan" class="control-label">Produto EAN</label>
-                <input asp-for="ProdutoProdEan" class="form-control" />
-                <span asp-validation-for="ProdutoProdEan" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServicoServId" class="control-label"></label>
-                <input asp-for="ServicoServId" class="form-control" />
-                <span asp-validation-for="ServicoServId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
-            </div>
-        </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="PedidoId" />
+                <div class="form-group">
+                    <label asp-for="PedidoQuantidade" class="control-label">Quantidade</label>
+                    <input asp-for="PedidoQuantidade" class="form-control" />
+                    <span asp-validation-for="PedidoQuantidade" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PedidoData" class="control-label">Data</label>
+                    <input asp-for="PedidoData" class="form-control" />
+                    <span asp-validation-for="PedidoData" class="text-danger"></span>
+                </div>
+                <input type="hidden" asp-for="UsuarioUserMat" />
+                @if (@Model.ProdutoProdEan != null)
+                {
+                    <div class="form-group">
+                        <label asp-for="ProdutoProdEan" class="control-label">Produto EAN</label>
+                        <input asp-for="ProdutoProdEan" class="form-control" />
+                        <span asp-validation-for="ProdutoProdEan" class="text-danger"></span>
+                    </div>
+                }
+                @if (@Model.ServicoServId != null)
+                {
+                    <div class="form-group">
+                        <label asp-for="ServicoServId" class="control-label"></label>
+                        <input asp-for="ServicoServId" class="form-control" />
+                        <span asp-validation-for="ServicoServId" class="text-danger"></span>
+                    </div>
+                }
+                <div class="form-group">
+                    <label asp-for="ServicoServId" class="control-label">Observação</label>
+                    <input asp-for="ServicoObservação" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Salvar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Voltar</a>
-</div>
+    <div>
+        <a asp-action="Index">Voltar</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 }

@@ -1,47 +1,72 @@
 @model IEnumerable<UGB.Data.OrdemCompra>
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Index";
-}
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+    var date = DateOnly.FromDateTime(DateTime.Today);
 
-<h1>Index</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OrdemQuantidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrdemPrecototal)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PedidoInterno)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrdemQuantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrdemPrecototal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PedidoInterno.PedidoId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <h1 class="title">Ordem de Compra</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.PedidoInternoPedidoId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ServicoNome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProdutoNome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrdemQuantidade)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.OrdemPrecototal)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PedidoInternoPedidoId)
+                    </td>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.ServicoNome)
+                    </th>
+                    <th>
+                        @Html.DisplayFor(modelItem => item.ProdutoNome)
+                    </th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrdemQuantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrdemPrecototal)
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.OrdemId">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.OrdemId">Deletar</a> |
+                        @if (item.ProdutoNome != null)
+                        {
+                            <form asp-controller="Estoque" asp-action="Create" asp-route-id="@item.OrdemId">
+                                <input type="submit" value="Entrada" class="btn btn-primary" />
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

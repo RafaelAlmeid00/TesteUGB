@@ -283,12 +283,6 @@ public partial class UGBContext : DbContext
             entity.Property(e => e.ProdutoProdEan).HasColumnName("Produto_prod_ean");
 
             entity.HasKey(e => e.EstoqueId);
-            entity
-                .HasOne(e => e.Produto)
-                .WithMany()
-                .HasForeignKey(e => e.ProdutoProdEan)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("fk_Estoque_Produto1");
         });
 
         OnModelCreatingPartial(modelBuilder);

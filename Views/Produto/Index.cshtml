@@ -22,6 +22,9 @@
         <thead>
             <tr>
                 <th>
+                    EAN
+                </th>
+                <th>
                     Nome
                 </th>
                 <th>
@@ -40,6 +43,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdEan)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.ProdNome)
                     </td>

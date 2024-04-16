@@ -18,12 +18,13 @@ namespace UGB.Controllers
         }
 
         // GET: Fornecedor
-        [HttpGet("Index")]
+        [HttpGet("/Fornecedor")]
         public async Task<IActionResult> Index()
         {
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(await _context.Fornecedors.ToListAsync());
         }
+
 
         // GET: Fornecedor/Details/5
         [HttpGet("Details/{id}")]

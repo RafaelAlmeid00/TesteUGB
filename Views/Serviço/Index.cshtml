@@ -1,46 +1,64 @@
 @model IEnumerable<UGB.Data.Serviço>
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Index";
-}
 
-<h1 class="title">Serviço</h1>
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<button class="button button-create">
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+
+    <h1 class="title">Serviço</h1>
+
+    <button class="button button-create">
         <a asp-action="Create" class="text">Criar Serviço</a>
     </button>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ServNome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServDescricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServPrazo)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServNome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServDescricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ServPrazo)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ServNome)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ServDescricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ServPrazo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FornecedorFornecedorCnpj)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServNome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServDescricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServPrazo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FornecedorFornecedorCnpj)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ServId">Editar</a> |
+                        <a asp-action="Details" asp-route-id="@item.ServId">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ServId">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

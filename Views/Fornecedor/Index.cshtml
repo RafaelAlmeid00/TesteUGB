@@ -15,6 +15,9 @@
         <thead>
             <tr>
                 <th>
+                    Nome
+                </th>
+                <th>
                     CNPJ
                 </th>
                 <th>
@@ -45,6 +48,9 @@
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FornecedorNome)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.FornecedorCnpj)
                     </td>

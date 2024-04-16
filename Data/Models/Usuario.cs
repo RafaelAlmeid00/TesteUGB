@@ -24,7 +24,9 @@ public class UsuarioLogin : IUsuarioLogin
 {
     [Required(ErrorMessage = "Por favor, insira a matricula.")]
     [StringLength(14, ErrorMessage = "A matricula deve ter 14 caracteres.")]
+    [MinLength(1, ErrorMessage = "A matricula não pode ser nula.")]
     public required string UserMat { get; set; }
     [Required(ErrorMessage = "Por favor, insira a senha.")]
+    [MinLength(1, ErrorMessage = "A senha não pode ser nula.")]
     public required string UserSenha { get; set; }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UGB.Data;
 
@@ -11,9 +12,11 @@ using UGB.Data;
 namespace UGB.Migrations
 {
     [DbContext(typeof(UGBContext))]
-    partial class UGBContextModelSnapshot : ModelSnapshot
+    [Migration("20240415210727_CreateIdentityServico")]
+    partial class CreateIdentityServico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

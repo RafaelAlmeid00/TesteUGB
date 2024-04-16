@@ -8,7 +8,8 @@
     IUsuario usuario = usuarioFactory.Create() as IUsuario;
     DateOnly date = DateOnly.FromDateTime(DateTime.Today);
     IPedidoInterno pedido = JsonConvert.DeserializeObject<PedidoInterno>(TempData["PedidoInterno"].ToString());
-    IProduto produto = JsonConvert.DeserializeObject<Produto>(TempData["Produto"].ToString());
+    IServiço serviço = JsonConvert.DeserializeObject<Serviço>(TempData["Serviço"].ToString());
+    DateOnly dataServiço = date.AddDays(int.Parse(serviço.ServPrazo));
 
     @if (TempData["Usuario"] != null)
     {
@@ -20,7 +21,7 @@
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Create" class="form">
+            <form asp-action="CreateService" class="form">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
                     <label asp-for="PedidoInternoPedidoId" class="control-label">Pedido Interno</label>
@@ -34,21 +35,12 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Descrição</label>
-                    <input class="form-control" value="@produto.ProdNome" disabled />
+                    <input class="form-control" value="@serviço.ServNome" disabled />
                     <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Data Entrega</label>
-                    <input id="dataEntrega" class="form-control" type="date" />
-                    <span class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Tipo de Unidade</label>
-                    <select class="form-control">
-                        <option value="Unidade">Unidade</option>
-                        <option value="KG">KG</option>
-                        <option value="PCT">PCT</option>
-                    </select>
+                    <input id="dataEntrega" class="form-control" type="date" value="@dataServiço"/>
                     <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -57,22 +49,12 @@
                     <span asp-validation-for="OrdemQuantidade" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Valor</label>
-                    <input id="valor" class="form-control" name="valor" type="text" value="@produto.ProdPreco" disabled />
+                    <label class="control-label">Código do Serviço</label>
+                    <input class="form-control" value="@serviço.ServId" disabled/>
                     <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="OrdemPrecototal" class="control-label"></label>
-                    <input id="valortotal" asp-for="OrdemPrecototal" class="form-control" name="valortotal" disabled />
-                    <span asp-validation-for="OrdemPrecototal" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Código do Pedido</label>
-                    <input class="form-control" value="@produto.ProdEan" disabled/>
-                    <span class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="CreateService" class="btn btn-primary" />
                 </div>
             </form>
         </div>

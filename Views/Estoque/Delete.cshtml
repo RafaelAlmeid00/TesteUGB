@@ -1,8 +1,17 @@
 @model UGB.Data.Estoque
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Deletar";
-}
+ var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
 <h1>Deletar</h1>
 
@@ -25,9 +34,10 @@
         </dd>
     </dl>
 
-    <form asp-action="DeleteConfirmed">
+    <form asp-action="Delete">
         <input type="hidden" asp-for="EstoqueId" />
         <input type="submit" value="Deletar" class="btn btn-danger" /> |
         <a asp-action="Index">Voltar</a>
     </form>
 </div>
+}

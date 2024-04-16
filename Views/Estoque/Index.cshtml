@@ -1,41 +1,83 @@
 @model IEnumerable<UGB.Data.Estoque>
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Index";
-}
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<h1>Index</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
-<p>
-    <a asp-action="Create">Criar Novo</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Produto
-            </th>
-            <th>
-                Quantidade
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdutoProdEan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantidade)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EstoqueId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.EstoqueId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.EstoqueId">Deletar</a>
-            </td>
-        </tr>
+    <h1 class="title">Estoque</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Produto Nome
+                </th>
+                <th>
+                    Produto Ean
+                </th>
+                <th>
+                    Quantidade
+                </th>
+                <th>
+                    Quantidade Minima
+                </th>
+                <th>
+                    Status
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdutoNome)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdutoProdEan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EstoqueMinimo)
+                    </td>
+                    @if (item.StatusEstoque == "Alerta")
+                    {
+                        <td class="text-danger">
+                            @Html.DisplayFor(modelItem => item.StatusEstoque)
+                        </td>
+                    }
+                    @if (item.StatusEstoque == "Aviso")
+                    {
+                        <td style="color: yellow;">
+                            @Html.DisplayFor(modelItem => item.StatusEstoque)
+                        </td>
+
+                    }
+                    @if (item.StatusEstoque == "OK")
+                    {
+                        <td style="color: green;">
+                            @Html.DisplayFor(modelItem => item.StatusEstoque)
+                        </td>
+
+                    }
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.EstoqueId">Detalhes</a> |
+                        <a asp-action="Delete" asp-route-id="@item.EstoqueId">Deletar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

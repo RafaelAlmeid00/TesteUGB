@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UGB.Data
 {
-    public partial class Fornecedor
+    public partial class Fornecedor : IFornecedor
     {
         [Key]
         [StringLength(14, ErrorMessage = "CNPJ só pode ter 14 digitos.")]

@@ -1,51 +1,63 @@
 @model UGB.Data.Serviço
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
 @{
     ViewData["Title"] = "Create";
-}
 
-<h1>Criar</h1>
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ServId" class="control-label"></label>
-                <input asp-for="ServId" class="form-control" />
-                <span asp-validation-for="ServId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServNome" class="control-label"></label>
-                <input asp-for="ServNome" class="form-control" />
-                <span asp-validation-for="ServNome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServDescricao" class="control-label"></label>
-                <input asp-for="ServDescricao" class="form-control" />
-                <span asp-validation-for="ServDescricao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServPrazo" class="control-label"></label>
-                <input asp-for="ServPrazo" class="form-control" />
-                <span asp-validation-for="ServPrazo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioUserMat" class="control-label"></label>
-                <select asp-for="UsuarioUserMat" class ="form-control" asp-items="ViewBag.UsuarioUserMat"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+
+    <h1>Criar</h1>
+
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ServNome" class="control-label"></label>
+                    <input asp-for="ServNome" class="form-control" />
+                    <span asp-validation-for="ServNome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ServDescricao" class="control-label"></label>
+                    <input asp-for="ServDescricao" class="form-control" />
+                    <span asp-validation-for="ServDescricao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ServPrazo" class="control-label">Prazo em dias</label>
+                    <input asp-for="ServPrazo" class="form-control" type="number"/>
+                    <span asp-validation-for="ServPrazo" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="UsuarioUserMat" class="control-label">Usuário</label>
+                    <input asp-for="UsuarioUserMat" class="form-control" value="@usuario.UserMat" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="FornecedorFornecedorCnpj" class="control-label"></label>
+                    <select asp-for="FornecedorFornecedorCnpj" class="form-control"
+                        asp-items="ViewBag.FornecedorCnpj"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 }
