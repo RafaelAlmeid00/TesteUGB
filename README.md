@@ -23,7 +23,7 @@ O Sistema de Gestão de Solicitação de Materiais e Serviços é uma aplicaçã
 - **Banco de Dados:** Utiliza o Microsoft SQL Server como banco de dados, com o script de criação disponível na pasta `Database`.
 - **Execução do Projeto:** Utilize o comando `dotnet watch` na raiz do projeto para iniciar o aplicativo.
 - **Arquitetura:** O projeto segue a arquitetura MVC (Model-View-Controller) usando Asp.net Razor Pages e é estruturado conforme os princípios SOLID.
-- **URL de Acesso:** O aplicativo está disponível em `http://localhost:5110/`, enquanto a documentação da API pode ser acessada em `http://localhost:5110/Swagger`.
+- **URL de Acesso:** O aplicativo está disponível em `http://localhost:5110/`.
 - **Padrão de Projeto:** O método Factory foi empregado para abstração de algumas entidades concretas, promovendo uma arquitetura mais flexível e escalável.
 
 ## Pré-requisitos
