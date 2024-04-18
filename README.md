@@ -28,8 +28,8 @@ O Sistema de Gestão de Solicitação de Materiais e Serviços é uma aplicaçã
 
 ## Pré-requisitos
 
-- .NET Core SDK (versão XX.XX.XX)
-- Microsoft SQL Server (versão XX.XX.XX)
+- .NET Core SDK (versão 8.0.203)
+- Microsoft SQL Server (versão 2022)
 
 ## Como Executar
 
