@@ -1,61 +1,63 @@
 @model UGB.Data.EntradaEstoque
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Create";
-}
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
+    var id = TempData["Id"];
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
-<h1>Create</h1>
+    <h1>Criar Entrada</h1>
 
-<h4>EntradaEstoque</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="EntradaId" class="control-label"></label>
-                <input asp-for="EntradaId" class="form-control" />
-                <span asp-validation-for="EntradaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EntradaNf" class="control-label"></label>
-                <input asp-for="EntradaNf" class="form-control" />
-                <span asp-validation-for="EntradaNf" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EntradaDeposito" class="control-label"></label>
-                <input asp-for="EntradaDeposito" class="form-control" />
-                <span asp-validation-for="EntradaDeposito" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EntradaQuantidade" class="control-label"></label>
-                <input asp-for="EntradaQuantidade" class="form-control" />
-                <span asp-validation-for="EntradaQuantidade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EntradaData" class="control-label"></label>
-                <input asp-for="EntradaData" class="form-control" />
-                <span asp-validation-for="EntradaData" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UsuarioUserMat" class="control-label"></label>
-                <select asp-for="UsuarioUserMat" class ="form-control" asp-items="ViewBag.UsuarioUserMat"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProdutoProdEan" class="control-label"></label>
-                <select asp-for="ProdutoProdEan" class ="form-control" asp-items="ViewBag.ProdutoProdEan"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="EntradaNf" class="control-label">Nota Fiscal</label>
+                    <input asp-for="EntradaNf" class="form-control" />
+                    <span asp-validation-for="EntradaNf" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EntradaDeposito" class="control-label">Depósito</label>
+                    <input asp-for="EntradaDeposito" class="form-control" />
+                    <span asp-validation-for="EntradaDeposito" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="EntradaQuantidade" class="control-label">Quantidade</label>
+                    <input asp-for="EntradaQuantidade" class="form-control" />
+                    <span asp-validation-for="EntradaQuantidade" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="EntradaData" class="control-label">Data Entrada</label>
+                    <input asp-for="EntradaData" id="dataEntrega" class="form-control" type="date"/>
+                    <span asp-validation-for="EntradaData" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="UsuarioUserMat" class="control-label"></label>
+                    <select asp-for="UsuarioUserMat" class="form-control" asp-items="ViewBag.UsuarioUserMat"></select>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="ProdutoProdEan" class="control-label"></label>
+                    <select asp-for="ProdutoProdEan" class="form-control" asp-items="ViewBag.ProdutoProdEan"></select>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Criar" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
 }

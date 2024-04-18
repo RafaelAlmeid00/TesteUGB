@@ -21,12 +21,12 @@
             <form asp-action="Create">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
-                    <label asp-for="ServNome" class="control-label"></label>
+                    <label asp-for="ServNome" class="control-label">Serviço</label>
                     <input asp-for="ServNome" class="form-control" />
                     <span asp-validation-for="ServNome" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ServDescricao" class="control-label"></label>
+                    <label asp-for="ServDescricao" class="control-label">Descrição</label>
                     <input asp-for="ServDescricao" class="form-control" />
                     <span asp-validation-for="ServDescricao" class="text-danger"></span>
                 </div>
@@ -40,7 +40,7 @@
                     <input asp-for="UsuarioUserMat" class="form-control" value="@usuario.UserMat" />
                 </div>
                 <div class="form-group">
-                    <label asp-for="FornecedorFornecedorCnpj" class="control-label"></label>
+                    <label asp-for="FornecedorFornecedorCnpj" class="control-label">Fornecedor CNPJ</label>
                     <select asp-for="FornecedorFornecedorCnpj" class="form-control"
                         asp-items="ViewBag.FornecedorCnpj"></select>
                 </div>

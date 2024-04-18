@@ -24,7 +24,6 @@ namespace UGB.Data
         [Required(ErrorMessage = "Por favor, insira o estoque minimo do produto.")]
         public string? ProdEstoqueminimo { get; set; }
         [ForeignKey("Usuario")]
-        [Required(ErrorMessage = "Por favor, insira o nome.")]
         public string? UsuarioUserMat { get; set; }
 
     }

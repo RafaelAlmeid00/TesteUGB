@@ -49,13 +49,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var ordemCompra = await _context.OrdemCompras.FirstOrDefaultAsync(m => m.OrdemId == id);
             if (ordemCompra == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(ordemCompra);
@@ -102,7 +102,7 @@ namespace UGB.Controllers
             if (pedidoInterno == null)
             {
                 // Lidar com o caso em que não há pedido interno com o ID fornecido
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             int? servicoServId = pedidoInterno.ServicoServId;
@@ -116,7 +116,7 @@ namespace UGB.Controllers
             if (serviço == null)
             {
                 // Lidar com o caso em que não há serviço com o ID fornecido
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             TempData["Serviço"] = JsonConvert.SerializeObject(serviço);
@@ -153,13 +153,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var ordemCompra = await _context.OrdemCompras.FirstOrDefaultAsync(m => m.OrdemId == id);
             if (ordemCompra == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(ordemCompra);

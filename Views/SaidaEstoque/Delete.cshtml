@@ -1,39 +1,35 @@
 @model UGB.Data.SaidaEstoque
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Delete";
-}
+  var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<h1>Delete</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
-<h3>Are you sure you want to delete this?</h3>
+<h1>Deletar</h1>
+
+    <h3>Tem certeza que quer deletar esse produto?</h3>
 <div>
-    <h4>SaidaEstoque</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SaidaQuantidade)
+            Quantidade
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.SaidaQuantidade)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntradaData)
+            Data
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EntradaData)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProdutoProdEanNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProdutoProdEanNavigation.ProdEan)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UsuarioUserMatNavigation.UserMat)
         </dd>
     </dl>
     
@@ -41,7 +37,8 @@
         <input type="hidden" asp-for="SaidaId" />
         <input type="hidden" asp-for="UsuarioUserMat" />
         <input type="hidden" asp-for="ProdutoProdEan" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Deletar" class="btn btn-danger" /> |
+        <a asp-action="Index">Voltar</a>
     </form>
 </div>
+}

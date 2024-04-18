@@ -19,19 +19,19 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.PedidoInternoPedidoId)
+                    ID Pedido Interno
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ServicoNome)
+                    Serviço Nome
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.ProdutoNome)
+                    Produto Nome
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrdemQuantidade)
+                    Quantidade
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.OrdemPrecototal)
+                    Preço Total
                 </th>
                 <th></th>
             </tr>
@@ -60,7 +60,7 @@
                         <a asp-action="Delete" asp-route-id="@item.OrdemId">Deletar</a> |
                         @if (item.ProdutoNome != null)
                         {
-                            <form asp-controller="Estoque" asp-action="Create" asp-route-id="@item.OrdemId">
+                            <form asp-controller="EntradaEstoque" asp-action="Create" method="get" asp-route-id="@item.OrdemId">
                                 <input type="submit" value="Entrada" class="btn btn-primary" />
                             </form>
                         }

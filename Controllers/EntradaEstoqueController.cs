@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using UGB.Data;
+using UGB.Interface;
 
 namespace UGB.Controllers
 {
@@ -20,8 +22,8 @@ namespace UGB.Controllers
         [HttpGet("/EntradaEstoque")]
         public async Task<IActionResult> Index()
         {
-            var uGBContext = _context.EntradaEstoques.Include(e => e.ProdutoProdEanNavigation).Include(e => e.UsuarioUserMatNavigation);
-            return View(await uGBContext.ToListAsync());
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
+            return View(await _context.EntradaEstoques.ToListAsync());
         }
 
         // GET: EntradaEstoque/Details/5
@@ -30,27 +32,26 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
+
             }
 
-            var entradaEstoque = await _context.EntradaEstoques
-                .Include(e => e.ProdutoProdEanNavigation)
-                .Include(e => e.UsuarioUserMatNavigation)
-                .FirstOrDefaultAsync(m => m.EntradaId == id);
+            var entradaEstoque = await _context.EntradaEstoques.FirstOrDefaultAsync(m => m.EntradaId == id);
             if (entradaEstoque == null)
             {
-                return NotFound();
-            }
+                return RedirectToAction("NotFoundError", "Error");
 
+            }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(entradaEstoque);
         }
 
         // GET: EntradaEstoque/Create
         [HttpGet("Create/{id}")]
-        public IActionResult Create(int? id)
+        public IActionResult Create(int id)
         {
-            ViewData["ProdutoProdEan"] = new SelectList(_context.Produtos, "ProdEan", "ProdEan");
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat");
+            TempData["Id"] = id;
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View();
         }
 
@@ -61,12 +62,24 @@ namespace UGB.Controllers
         {
             if (ModelState.IsValid)
             {
+                DateOnly date = DateOnly.FromDateTime(DateTime.Today);
+                IUsuario usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Usuario"));
+                IOrdemCompra ordem = await _context.OrdemCompras.FirstOrDefaultAsync(o => o.OrdemId == id);
+                IPedidoInterno pedido = await _context.PedidoInternos.FirstOrDefaultAsync(p => p.PedidoId == ordem.PedidoInternoPedidoId);
+                IProduto produto = await _context.Produtos.FindAsync(pedido.ProdutoProdEan);
+                entradaEstoque.EntradaQuantidade = ordem.OrdemQuantidade;
+                entradaEstoque.ProdutoProdEan = produto.ProdEan;
+                entradaEstoque.UsuarioUserMat = usuario.UserMat;
+                entradaEstoque.EntradaData = date;
+                IEstoque estoqueExist = await _context.Estoques.FirstOrDefaultAsync(e => e.ProdutoProdEan == produto.ProdEan);
                 _context.Add(entradaEstoque);
                 await _context.SaveChangesAsync();
+                if (estoqueExist == null)
+                {
+                    return RedirectToAction("Create", "Estoque", new { ean = entradaEstoque.ProdutoProdEan });
+                }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProdutoProdEan"] = new SelectList(_context.Produtos, "ProdEan", "ProdEan", entradaEstoque.ProdutoProdEan);
-            ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", entradaEstoque.UsuarioUserMat);
             return View(entradaEstoque);
         }
 
@@ -76,18 +89,17 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
+
             }
 
-            var entradaEstoque = await _context.EntradaEstoques
-                .Include(e => e.ProdutoProdEanNavigation)
-                .Include(e => e.UsuarioUserMatNavigation)
-                .FirstOrDefaultAsync(m => m.EntradaId == id);
+            var entradaEstoque = await _context.EntradaEstoques.FirstOrDefaultAsync(m => m.EntradaId == id);
             if (entradaEstoque == null)
             {
-                return NotFound();
-            }
+                return RedirectToAction("NotFoundError", "Error");
 
+            }
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(entradaEstoque);
         }
 

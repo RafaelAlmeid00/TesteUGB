@@ -30,14 +30,14 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(m => m.UserMat == id);
             if (usuario == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(usuario);
@@ -73,13 +73,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var usuario = await _context.Usuarios.FindAsync(id);
             if (usuario == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(usuario);
@@ -92,7 +92,7 @@ namespace UGB.Controllers
         {
             if (id != usuario.UserMat)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             if (ModelState.IsValid)
@@ -109,7 +109,7 @@ namespace UGB.Controllers
                 {
                     if (!UsuarioExists(usuario.UserMat))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFoundError", "Error");
                     }
                     else
                     {
@@ -127,14 +127,14 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(m => m.UserMat == id);
             if (usuario == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(usuario);

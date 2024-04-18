@@ -1,22 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UGB.Data
 {
-public class SaidaEstoque
-{
-    public int SaidaId { get; set; }
+    public class SaidaEstoque : ISaidaEstoque
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int SaidaId { get; set; }
 
-    public int SaidaQuantidade { get; set; }
+        [Required(ErrorMessage = "Por favor, insira a quantidade.")]
+        public int SaidaQuantidade { get; set; }
+        public DateOnly? EntradaData { get; set; }
 
-    public DateOnly EntradaData { get; set; }
+        [ForeignKey("Usuario")]
+        public string? UsuarioUserMat { get; set; }
+        [ForeignKey("Produto")]
+        public string? ProdutoProdEan { get; set; }
+    }
 
-    public int UsuarioUserMat { get; set; }
-
-    public int ProdutoProdEan { get; set; }
-
-    public virtual Produto ProdutoProdEanNavigation { get; set; } = null!;
-
-    public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
-}
 }

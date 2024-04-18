@@ -45,17 +45,16 @@ namespace UGB.Controllers
                 if (item.ProdutoProdEan != null)
                 {
                     var produto = await _context.Produtos.FirstOrDefaultAsync(m => m.ProdEan == item.ProdutoProdEan);
-                    item.ProdutoNome = produto.ProdNome;
-                    Console.WriteLine("prduto" + produto);
-                    Console.WriteLine("pedido" + item);
+                    if (produto.ProdNome != null)
+                    {
+                        item.ProdutoNome = produto.ProdNome;
+                    }
 
                 }
                 if (item.ServicoServId != null)
                 {
                     var serviço = await _context.Serviços.FirstOrDefaultAsync(m => m.ServId == item.ServicoServId);
                     item.ServicoNome = serviço.ServNome;
-                    Console.WriteLine("prduto" + serviço);
-                    Console.WriteLine("pedido" + item);
                 }
             }
 
@@ -63,7 +62,6 @@ namespace UGB.Controllers
             {
                 pedidosInternos.RemoveAt(indice);
             }
-            Console.WriteLine("pedido" + pedidosInternos);
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             var order = JsonConvert.SerializeObject(pedidosInternos);
             HttpContext.Session.SetString("PedidoInterno", order);
@@ -71,75 +69,76 @@ namespace UGB.Controllers
             return View();
         }
 
-    [HttpGet("Privacy")]
-    public IActionResult Privacy()
-    {
-        TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
-
-        return View();
-    }
-
-    // POST: Home/Login
-    public async Task<IActionResult> Login([FromForm] UsuarioLogin usuario)
-    {
-        if (ModelState.IsValid)
+        [HttpGet("Privacy")]
+        public IActionResult Privacy()
         {
-            var userAuthenticated = await _context.Usuarios.FirstOrDefaultAsync(u => u.UserMat == usuario.UserMat);
+            TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
 
-            if (userAuthenticated != null)
+            return View();
+        }
+
+        // POST: Home/Login
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromForm] UsuarioLogin usuario)
+        {
+            if (ModelState.IsValid)
             {
-                var cryptoFactory = new CryptoFactory(userAuthenticated.UserSenha, usuario.UserSenha);
-                var crypto = cryptoFactory.Create();
-                var decrypt = crypto.Decrypt();
+                var userAuthenticated = await _context.Usuarios.FirstOrDefaultAsync(u => u.UserMat == usuario.UserMat);
 
-                if (decrypt)
+                if (userAuthenticated != null)
                 {
-                    var authFactory = new AuthFactory(userAuthenticated);
-                    var auth = authFactory.Create();
-                    var token = auth.CreateToken();
-                    HttpContext.Session.SetString("AuthToken", token);
+                    var cryptoFactory = new CryptoFactory(userAuthenticated.UserSenha, usuario.UserSenha);
+                    var crypto = cryptoFactory.Create();
+                    var decrypt = crypto.Decrypt();
 
-                    var usuarioFactory = new UsuarioFactory();
-                    var viewUser = (Usuario)usuarioFactory.Create();
-                    viewUser.UserMat = userAuthenticated.UserMat;
-                    viewUser.UserNome = userAuthenticated.UserNome;
-                    viewUser.UserEmail = userAuthenticated.UserEmail;
-                    viewUser.UserSenha = userAuthenticated.UserSenha;
-                    viewUser.UserDepartamento = userAuthenticated.UserDepartamento;
+                    if (decrypt)
+                    {
+                        var authFactory = new AuthFactory(userAuthenticated);
+                        var auth = authFactory.Create();
+                        var token = auth.CreateToken();
+                        HttpContext.Session.SetString("AuthToken", token);
 
-                    var usuarioJson = JsonConvert.SerializeObject(viewUser);
-                    HttpContext.Session.SetString("Usuario", usuarioJson);
-                    TempData["Usuario"] = usuarioJson;
+                        var usuarioFactory = new UsuarioFactory();
+                        var viewUser = (Usuario)usuarioFactory.Create();
+                        viewUser.UserMat = userAuthenticated.UserMat;
+                        viewUser.UserNome = userAuthenticated.UserNome;
+                        viewUser.UserEmail = userAuthenticated.UserEmail;
+                        viewUser.UserSenha = userAuthenticated.UserSenha;
+                        viewUser.UserDepartamento = userAuthenticated.UserDepartamento;
 
-                    return RedirectToAction("Index");
+                        var usuarioJson = JsonConvert.SerializeObject(viewUser);
+                        HttpContext.Session.SetString("Usuario", usuarioJson);
+                        TempData["Usuario"] = usuarioJson;
+
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        var errorMessage = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Usuario ou Senha incorreta." };
+                        TempData["ErrorView"] = JsonConvert.SerializeObject(errorMessage);
+                    }
                 }
                 else
                 {
-                    var errorMessage = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Usuario ou Senha incorreta." };
+                    var errorMessage = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Usuário não encontrado. Cadastre-se" };
                     TempData["ErrorView"] = JsonConvert.SerializeObject(errorMessage);
                 }
             }
             else
             {
-                var errorMessage = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Usuário não encontrado. Cadastre-se" };
+                var errorMessage = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Por favor, preencha todos os campos." };
                 TempData["ErrorView"] = JsonConvert.SerializeObject(errorMessage);
             }
+
+            return RedirectToAction("Index");
         }
-        else
+
+
+        [HttpGet("Home/Error")]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
         {
-            var errorMessage = new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier, Message = "Por favor, preencha todos os campos." };
-            TempData["ErrorView"] = JsonConvert.SerializeObject(errorMessage);
+            return View(new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        return RedirectToAction("Index");
     }
-
-
-    [HttpGet("Home/Error")]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
-    {
-        return View(new ErrorView { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-}
 }

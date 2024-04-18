@@ -1,54 +1,50 @@
 @model UGB.Data.EntradaEstoque
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Details";
-}
+ var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<h1>Details</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
+
+<h1>Detalhes</h1>
 
 <div>
-    <h4>EntradaEstoque</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntradaNf)
+           Nota Fiscal
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EntradaNf)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntradaDeposito)
+            Depósito
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EntradaDeposito)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntradaQuantidade)
+            Quantidade
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EntradaQuantidade)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EntradaData)
+            Data
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.EntradaData)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ProdutoProdEanNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProdutoProdEanNavigation.ProdEan)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UsuarioUserMatNavigation.UserMat)
-        </dd>
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar</a>
 </div>
+}

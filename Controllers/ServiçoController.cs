@@ -32,13 +32,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var serviço = await _context.Serviços.FirstOrDefaultAsync(m => m.ServId == id);
             if (serviço == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(serviço);
@@ -62,8 +62,6 @@ namespace UGB.Controllers
             {
                 var usuario = JsonConvert.DeserializeObject<Usuario>(HttpContext.Session.GetString("Usuario").ToString());
                 serviço.UsuarioUserMat = usuario.UserMat;
-                Console.WriteLine(usuario);
-                Console.WriteLine(serviço);
                 _context.Add(serviço);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -77,13 +75,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var serviço = await _context.Serviços.FirstOrDefaultAsync(s => s.ServId == id);
             if (serviço == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["FornecedorFornecedorCnpj"] = new SelectList(_context.Fornecedors, "FornecedorCnpj", "FornecedorCnpj", serviço.FornecedorFornecedorCnpj);
@@ -97,7 +95,7 @@ namespace UGB.Controllers
         {
             if (id != serviço.ServId)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             if (ModelState.IsValid)
@@ -113,7 +111,7 @@ namespace UGB.Controllers
                 {
                     if (!ServiçoExists(serviço.ServId))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFoundError", "Error");
                     }
                     else
                     {
@@ -134,13 +132,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var serviço = await _context.Serviços.FirstOrDefaultAsync(m => m.ServId == id);
             if (serviço == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(serviço);

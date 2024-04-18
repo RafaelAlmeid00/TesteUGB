@@ -31,13 +31,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var produto = await _context.Produtos.FirstOrDefaultAsync(m => m.ProdEan == id);
             if (produto == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
 
@@ -79,13 +79,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var produto = await _context.Produtos.FindAsync(id);
             if (produto == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["Fornecedor"] = new SelectList(_context.Fornecedors, "FornecedorNome", "FornecedorNome");
@@ -100,7 +100,7 @@ namespace UGB.Controllers
         {
             if (id != produto.ProdEan)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             if (ModelState.IsValid)
@@ -114,7 +114,7 @@ namespace UGB.Controllers
                 {
                     if (!ProdutoExists(produto.ProdEan))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFoundError", "Error");
                     }
                     else
                     {
@@ -134,20 +134,20 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var produto = await _context.Produtos.FirstOrDefaultAsync(m => m.ProdEan == id);
             if (produto == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(produto);
         }
 
         // POST: Produto/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {

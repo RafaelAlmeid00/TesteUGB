@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UGB.Data
@@ -7,9 +6,7 @@ namespace UGB.Data
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int EstoqueId { get; set; }
-
-        [Required(ErrorMessage = "Por favor, insira a quantidade.")]
-        public int Quantidade { get; set; }
+        public int? Quantidade { get; set; }
 
         [ForeignKey("Produto")]
         public string? ProdutoProdEan { get; set; }

@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UGB.Data
 {
 
-public partial class EntradaEstoque
-{
-    public int EntradaId { get; set; }
+    public class EntradaEstoque : IEntradaEstoque
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int EntradaId { get; set; }
+        [Required(ErrorMessage = "Por favor, insira a NF.")]
+        public string EntradaNf { get; set; } = null!;
+        [Required(ErrorMessage = "Por favor, insira o Depósito.")]
+        public string? EntradaDeposito { get; set; }
+        public int? EntradaQuantidade { get; set; }
+        public DateOnly? EntradaData { get; set; }
+        [ForeignKey("Usuario")]
+        public string? UsuarioUserMat { get; set; }
+        [ForeignKey("Produto")]
+        public string? ProdutoProdEan { get; set; }
 
-    public string EntradaNf { get; set; } = null!;
-
-    public string EntradaDeposito { get; set; } = null!;
-
-    public int EntradaQuantidade { get; set; }
-
-    public DateOnly EntradaData { get; set; }
-
-    public int UsuarioUserMat { get; set; }
-
-    public int ProdutoProdEan { get; set; }
-
-    public virtual Produto ProdutoProdEanNavigation { get; set; } = null!;
-
-    public virtual Usuario UsuarioUserMatNavigation { get; set; } = null!;
-}
+    }
 }

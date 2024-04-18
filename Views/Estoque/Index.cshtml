@@ -15,6 +15,13 @@
 
     <h1 class="title">Estoque</h1>
 
+    <button class="button button-create">
+        <a asp-controller="EntradaEstoque" asp-action="Index" class="text">Entradas Estoque</a>
+    </button>
+    <button class="button button-create">
+        <a asp-controller="SaidaEstoque" asp-action="Index" class="text">Saídas Estoque</a>
+    </button>
+
     <table class="table">
         <thead>
             <tr>
@@ -74,7 +81,10 @@
                     }
                     <td>
                         <a asp-action="Details" asp-route-id="@item.EstoqueId">Detalhes</a> |
-                        <a asp-action="Delete" asp-route-id="@item.EstoqueId">Deletar</a>
+                        <a asp-action="Delete" asp-route-id="@item.EstoqueId">Deletar</a> |
+                        <form asp-controller="SaidaEstoque" asp-action="Create" method="get" asp-route-id="@item.ProdutoProdEan">
+                            <input type="submit" value="Saída" class="btn btn-primary" />
+                        </form>
                     </td>
                 </tr>
             }

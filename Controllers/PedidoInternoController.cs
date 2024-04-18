@@ -43,16 +43,12 @@ namespace UGB.Controllers
                 {
                     var produto = await _context.Produtos.FirstOrDefaultAsync(m => m.ProdEan == item.ProdutoProdEan);
                     item.ProdutoNome = produto.ProdNome;
-                    Console.WriteLine("prduto" + produto);
-                    Console.WriteLine("pedido" + item);
 
                 }
                 if (item.ServicoServId != null)
                 {
                     var serviço = await _context.Serviços.FirstOrDefaultAsync(m => m.ServId == item.ServicoServId);
                     item.ServicoNome = serviço.ServNome;
-                    Console.WriteLine("prduto" + serviço);
-                    Console.WriteLine("pedido" + item);
                 }
             }
 
@@ -60,7 +56,6 @@ namespace UGB.Controllers
             {
                 pedidosInternos.RemoveAt(indice);
             }
-            Console.WriteLine("pedido" + pedidosInternos);
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(pedidosInternos);
         }
@@ -71,13 +66,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var pedidoInterno = await _context.PedidoInternos.FirstOrDefaultAsync(m => m.PedidoId == id);
             if (pedidoInterno == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(pedidoInterno);
@@ -99,15 +94,12 @@ namespace UGB.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([FromForm] PedidoInterno pedidoInterno)
         {
-            Console.WriteLine(pedidoInterno.SelectValue);
             if (pedidoInterno.SelectValue != "Produto")
             {
-                Console.WriteLine("Serviço" + pedidoInterno.SelectValue);
                 pedidoInterno.ProdutoProdEan = null;
             }
             if (pedidoInterno.SelectValue != "Serviço")
             {
-                Console.WriteLine("Produto" + pedidoInterno.SelectValue);
                 pedidoInterno.ServicoServId = null;
             }
 
@@ -128,13 +120,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var pedidoInterno = await _context.PedidoInternos.FirstOrDefaultAsync(m => m.PedidoId == id);
             if (pedidoInterno == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
 
@@ -149,7 +141,7 @@ namespace UGB.Controllers
         {
             if (id != pedidoInterno.PedidoId)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             if (ModelState.IsValid)
@@ -163,7 +155,7 @@ namespace UGB.Controllers
                 {
                     if (!PedidoInternoExists(pedidoInterno.PedidoId))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFoundError", "Error");
                     }
                     else
                     {
@@ -182,13 +174,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var pedidoInterno = await _context.PedidoInternos.FirstOrDefaultAsync(m => m.PedidoId == id);
             if (pedidoInterno == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(pedidoInterno);

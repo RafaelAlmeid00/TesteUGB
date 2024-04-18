@@ -1,53 +1,53 @@
 @model IEnumerable<UGB.Data.SaidaEstoque>
-
+@using Newtonsoft.Json
+@using UGB.Factory
+@using UGB.Interface
+@using UGB.Services
 @{
     ViewData["Title"] = "Index";
-}
+    var usuarioFactory = new UsuarioFactory();
+    var usuario = usuarioFactory.Create() as IUsuario;
 
-<h1>Index</h1>
+    @if (TempData["Usuario"] != null)
+    {
+        usuario = JsonConvert.DeserializeObject<Usuario>(TempData["Usuario"].ToString());
+    }
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.SaidaQuantidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EntradaData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProdutoProdEanNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UsuarioUserMatNavigation)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.SaidaQuantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EntradaData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProdutoProdEanNavigation.ProdEan)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UsuarioUserMatNavigation.UserMat)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+    <h1 class="title">Saídas Estoques</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Produto EAN
+                </th>
+                <th>
+                    Quantidade
+                </th>
+                <th>
+                    Data
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProdutoProdEan)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SaidaQuantidade)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EntradaData)
+                    </td>
+                    <td>
+                        <a asp-action="Detalhes" asp-route-id="@item.SaidaId">Detalhes</a> |
+                        <a asp-action="Deletar" asp-route-id="@item.SaidaId">Deletar</a> |
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-    </tbody>
-</table>

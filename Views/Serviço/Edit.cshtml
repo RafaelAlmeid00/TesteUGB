@@ -23,17 +23,17 @@
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="ServId" />
                 <div class="form-group">
-                    <label asp-for="ServNome" class="control-label"></label>
+                    <label asp-for="ServNome" class="control-label">Nome</label>
                     <input asp-for="ServNome" class="form-control" />
                     <span asp-validation-for="ServNome" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ServDescricao" class="control-label"></label>
+                    <label asp-for="ServDescricao" class="control-label">Descrição</label>
                     <input asp-for="ServDescricao" class="form-control" />
                     <span asp-validation-for="ServDescricao" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="ServPrazo" class="control-label"></label>
+                    <label asp-for="ServPrazo" class="control-label">Prazo em Dias</label>
                     <input asp-for="ServPrazo" class="form-control" />
                     <span asp-validation-for="ServPrazo" class="text-danger"></span>
                 </div>
@@ -43,7 +43,7 @@
                     <span asp-validation-for="UsuarioUserMat" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="FornecedorFornecedorCnpj" class="control-label"></label>
+                    <label asp-for="FornecedorFornecedorCnpj" class="control-label">Fornecedor CNPJ</label>
                     <select asp-for="FornecedorFornecedorCnpj" class="form-control"
                         asp-items="ViewBag.FornecedorFornecedorCnpj"></select>
                 </div>

@@ -20,21 +20,40 @@ namespace UGB.Controllers
         [HttpGet("/Estoque")]
         public async Task<IActionResult> Index()
         {
+            List<EntradaEstoque> entradas = await _context.EntradaEstoques.ToListAsync();
+            List<SaidaEstoque> saidas = await _context.SaidaEstoques.ToListAsync();
             List<Estoque> estoques = await _context.Estoques.ToListAsync();
             foreach (var item in estoques)
             {
-                IProduto produto = await _context.Produtos.FindAsync(item.ProdutoProdEan);
-                item.ProdutoNome = produto.ProdNome;
-                item.EstoqueMinimo = produto.ProdEstoqueminimo;
-                if (int.Parse(item.EstoqueMinimo) > item.Quantidade)
+                foreach (var entrada in entradas)
                 {
-                    item.StatusEstoque = "Alerta";
+                    if (entrada.ProdutoProdEan == item.ProdutoProdEan)
+                    {
+                        item.Quantidade += entrada.EntradaQuantidade;
+                    }
                 }
-                else if (int.Parse(item.EstoqueMinimo) == item.Quantidade)
+
+                foreach (var saida in saidas)
                 {
-                    item.StatusEstoque = "Aviso";
-                } else {
-                    item.StatusEstoque = "OK";
+                    if (saida.ProdutoProdEan == item.ProdutoProdEan)
+                    {
+                        item.Quantidade -= saida.SaidaQuantidade;
+                    }
+                    IProduto produto = await _context.Produtos.FindAsync(item.ProdutoProdEan);
+                    item.ProdutoNome = produto.ProdNome;
+                    item.EstoqueMinimo = produto.ProdEstoqueminimo;
+                    if (int.Parse(item.EstoqueMinimo) > item.Quantidade)
+                    {
+                        item.StatusEstoque = "Alerta";
+                    }
+                    else if (int.Parse(item.EstoqueMinimo) == item.Quantidade)
+                    {
+                        item.StatusEstoque = "Aviso";
+                    }
+                    else
+                    {
+                        item.StatusEstoque = "OK";
+                    }
                 }
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
@@ -48,38 +67,39 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var estoque = await _context.Estoques
                 .FirstOrDefaultAsync(m => m.EstoqueId == id);
             if (estoque == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
 
             return View(estoque);
+
+        }
+
+
+        [HttpGet("Create/{ean}")]
+        public IActionResult Create(string ean)
+        {
+            TempData["ean"] = ean;
+            return View();
         }
 
         // POST: Estoque/Create
-        [HttpPost("Create/{id}")]
+        [HttpPost("Create/{ean}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] Estoque estoque, int id)
+        public async Task<IActionResult> Create([FromForm] Estoque estoque, string ean)
         {
             if (ModelState.IsValid)
             {
-                IOrdemCompra ordem = await _context.OrdemCompras.FirstOrDefaultAsync(o => o.OrdemId == id);
-                IPedidoInterno pedido = await _context.PedidoInternos.FirstOrDefaultAsync(p => p.PedidoId == ordem.PedidoInternoPedidoId);
-                IProduto produto = await _context.Produtos.FindAsync(pedido.ProdutoProdEan);
-                estoque.Quantidade = ordem.OrdemQuantidade;
-                estoque.ProdutoProdEan = produto.ProdEan;
-                IEstoque estoqueExist = await _context.Estoques.FirstOrDefaultAsync(e => e.ProdutoProdEan == produto.ProdEan);
-                if (estoqueExist != null)
-                {
-                    return RedirectToAction("Create", "EntradaEstoque", new { id });
-                }
+                estoque.ProdutoProdEan = ean;
+                estoque.Quantidade = 0;
                 _context.Add(estoque);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -94,14 +114,14 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var estoque = await _context.Estoques
                 .FirstOrDefaultAsync(m => m.EstoqueId == id);
             if (estoque == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
 

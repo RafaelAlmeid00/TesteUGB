@@ -32,13 +32,13 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var fornecedor = await _context.Fornecedors.FirstOrDefaultAsync(m => m.FornecedorCnpj == id);
             if (fornecedor == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(fornecedor);
@@ -77,20 +77,14 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                Console.WriteLine(id);
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var fornecedor = await _context.Fornecedors.FindAsync(id);
             if (fornecedor == null)
             {
-                Console.WriteLine(fornecedor);
-
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
-            Console.WriteLine(fornecedor);
-            Console.WriteLine(id);
-
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             ViewData["UsuarioUserMat"] = new SelectList(_context.Usuarios, "UserMat", "UserMat", fornecedor.UsuarioUserMat);
             return View(fornecedor);
@@ -104,7 +98,7 @@ namespace UGB.Controllers
         {
             if (id != fornecedor.FornecedorCnpj)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             if (ModelState.IsValid)
@@ -118,7 +112,7 @@ namespace UGB.Controllers
                 {
                     if (!FornecedorExists(fornecedor.FornecedorCnpj))
                     {
-                        return NotFound();
+                        return RedirectToAction("NotFoundError", "Error");
                     }
                     else
                     {
@@ -138,14 +132,14 @@ namespace UGB.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
 
             var fornecedor = await _context.Fornecedors
                 .FirstOrDefaultAsync(m => m.FornecedorCnpj == id);
             if (fornecedor == null)
             {
-                return NotFound();
+                return RedirectToAction("NotFoundError", "Error");
             }
             TempData["Usuario"] = HttpContext.Session.GetString("Usuario");
             return View(fornecedor);
