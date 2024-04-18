@@ -48,4 +48,4 @@ Contribuições são bem-vindas! Para sugestões, correções ou novos recursos,
 
 ## Licença
 
-Este projeto está licenciado sob a Licença [MIT](LICENSE).
+Este projeto está licenciado sob a Licença [MIT](License).
